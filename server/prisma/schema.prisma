@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  name     String
+  email    String  @unique
+  password String
+  hashedRT String?
+
+  lists         List[]
+  titleComments TitleComment[]
+  PageComments  PageComment[]
+
+  role     Role    @default(USER)
+  isAdmin  Boolean @default(false)
+  isAuthor Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model List {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  titles Title[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Title {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String
+  type        String
+
+  chapters Chapter[]
+  comments TitleComment[]
+  list     List[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chapter {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  titleId Int
+
+  pages Page[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Page {
+  id     Int    @id @default(autoincrement())
+  imgUri String
+  number Int
+
+  Chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId Int
+
+  comments PageComment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PageComment {
+  id      Int    @id @default(autoincrement())
+  message String
+
+  parent   PageComment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children PageComment[] @relation("ParentChild")
+  parentId Int?
+
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  Page   Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TitleComment {
+  id      Int    @id @default(autoincrement())
+  message String
+
+  parent   TitleComment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children TitleComment[] @relation("ParentChild")
+  parentId Int?
+
+  Title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  titleId Int
+
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+  AUTHOR
+}

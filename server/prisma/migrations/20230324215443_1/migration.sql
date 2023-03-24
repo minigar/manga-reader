@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Title" ALTER COLUMN "listId" DROP NOT NULL;
