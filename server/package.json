@@ -21,7 +21,7 @@
   },
   "type": "module",
   "prisma": {
-    "seed": "node src/seed.js"
+    "seed": "node prisma/seed.js"
   },
   "dependencies": {
     "@nestjs/common": "^9.3.12",
