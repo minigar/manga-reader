@@ -1,6 +1,6 @@
 export function successResponse<T>(data: T) {
   return {
-    success: true,
+    satusCode: 200,
     data,
   };
 }

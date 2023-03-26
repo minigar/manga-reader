@@ -12,6 +12,11 @@ const APP_PORT = process.env.APP_PORT;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {});
 
+  app.enableCors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+  });
+
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
