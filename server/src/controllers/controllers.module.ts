@@ -6,6 +6,7 @@ import { ServiceModule } from 'src/services/services.module';
 import { UserController } from './user.controller';
 import { AuthController } from './auth.controller';
 import { ListController } from './list.controller';
+import { TitleController } from './title.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -14,6 +15,7 @@ import { ListController } from './list.controller';
     UserController,
     AuthController,
     ListController,
+    TitleController,
   ],
 })
 export class ControllersModule {}

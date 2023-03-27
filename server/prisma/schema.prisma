@@ -44,10 +44,12 @@ model List {
 }
 
 model Title {
-  id          Int    @id @default(autoincrement())
-  name        String @unique
-  description String
-  type        String
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  description String?
+  type        TitleType   @default(MANGA)
+  status      TitleStatus @default(ANNOUNCEMENT)
+  yearRelease Int         @default(1990)
 
   chapters Chapter[]
   comments TitleComment[]
@@ -125,4 +127,19 @@ enum Role {
   ADMIN
   AUTHOR
 }
+
 //ARTIST TODO
+
+enum TitleType {
+  MANGA
+  MANHWA
+  MAMHUA
+  COMICS
+}
+
+enum TitleStatus {
+  ANNOUNCEMENT
+  ONGOING
+  FINISHED
+  SUSPENDED
+}

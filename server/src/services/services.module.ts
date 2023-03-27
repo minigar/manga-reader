@@ -5,10 +5,11 @@ import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { ListService } from './list.service';
+import { TitleService } from './title.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
-  providers: [UserService, AuthService, JwtService, ListService],
-  exports: [UserService, AuthService, JwtService, ListService],
+  providers: [UserService, AuthService, JwtService, ListService, TitleService],
+  exports: [UserService, AuthService, JwtService, ListService, TitleService],
 })
 export class ServiceModule {}
