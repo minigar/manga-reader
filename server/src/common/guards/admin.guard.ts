@@ -1,10 +1,10 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { UserRoles } from '../enums/user.enum';
-import { UsersService } from '../../services/user.service';
+import { UserService } from '../../services/user.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UserService) {}
 
   async canActivate(context: ExecutionContext) {
     const req = await context.switchToHttp().getRequest();

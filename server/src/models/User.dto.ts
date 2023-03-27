@@ -18,7 +18,7 @@ export class UserDecoded {
   userId: number;
   name: string;
   email: string;
-  refreshTokenId: string;
+  refreshTokenId?: string;
   iat: number;
   exp: number;
 }

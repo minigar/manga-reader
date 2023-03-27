@@ -6,7 +6,7 @@ import { UserUpdate } from '../models/User.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly db: DatabaseService) {}
   async getList() {
     const users = await this.db.user.findMany();
