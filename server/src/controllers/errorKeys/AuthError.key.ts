@@ -2,6 +2,7 @@ export const AuthErrorKey = {
   EMAIL_EXISTS: 'This email already exists!',
   EMAIL_BAD_REQUEST: 'This email does not exist!',
   EMAIL_CAN_NOT_BE_EMPTY: 'Email cannot be empy',
+  EMAIL_NOT_MACTHES: 'Email not matches!',
   PASSWORD_CAN_NOT_BE_EMPTY: 'Password cannot be empy',
   PASSWORDS_ARE_NOT_SAME: 'Password are not same!',
   HASHED_RT_NON_EXISTENT: 'HashedRt does not exist!',

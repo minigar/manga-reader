@@ -1,0 +1,20 @@
+services:
+    postgres:
+        image: postgres
+        container_name: postgres
+        restart: always
+
+        ports:
+            - "5432:5432"
+
+        environment :
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: admin
+            POSTGRES_DB: manga-reader
+
+        volumes:
+            - /var/db/postgres/manga-reader
+
+volumes:
+    postgres:
+        name: db

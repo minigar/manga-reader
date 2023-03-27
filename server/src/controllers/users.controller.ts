@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -29,7 +30,7 @@ export class UserController {
   @Put(':id')
   async updateById(
     @Param('id', ParseIntPipe) id: number,
-    payload: UserBodyModel,
+    @Body() payload: UserBodyModel,
   ) {
     return successResponse(await this.usersService.updateById(id, payload));
   }

@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
-import { UserErrorKey } from 'src/controllers/errorKeys';
-import { UserBodyModel } from '../models/User.dto';
+import { AuthErrorKey, UserErrorKey } from 'src/controllers/errorKeys';
+import { UserUpdate } from '../models/User.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -25,9 +26,26 @@ export class UsersService {
     return user;
   }
 
-  async updateById(id: number, payload: UserBodyModel) {
+  async updateById(id: number, payload: UserUpdate) {
     const user = await this.db.user.findFirst({ where: { id } });
-    return;
+
+    if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
+
+    const isMatches = await bcrypt.compare(payload.password, user.password);
+
+    if (!isMatches) {
+      throw new BusinessError(AuthErrorKey.PASSWORDS_ARE_NOT_SAME);
+    }
+
+    if (payload.email !== user.email)
+      throw new BusinessError(AuthErrorKey.EMAIL_NOT_MACTHES);
+
+    return await this.db.user.update({
+      where: { id },
+      data: {
+        name: payload.name,
+      },
+    });
   }
 
   async deleteById(id: number) {

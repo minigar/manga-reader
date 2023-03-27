@@ -22,3 +22,17 @@ export class UserDecoded {
   iat: number;
   exp: number;
 }
+
+export class UserUpdate {
+  @IsNotEmpty()
+  @IsString()
+  name?: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  email?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password?: string;
+}
