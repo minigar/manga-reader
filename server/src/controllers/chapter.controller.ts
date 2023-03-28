@@ -11,7 +11,7 @@ import {
 import { Public } from 'src/common/decorators ';
 import { successResponse } from 'src/helpers/success-response';
 import { ChapterService } from 'src/services/chapter.service';
-import { ChapterBOdyModel } from '../models/Chapter.dto';
+import { ChapterBodyModel } from '../models/Chapter.dto';
 
 @Controller('titles/:titleId/chapters')
 export class ChapterController {
@@ -34,7 +34,7 @@ export class ChapterController {
   @Post()
   async create(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Body() { name }: ChapterBOdyModel,
+    @Body() { name }: ChapterBodyModel,
   ) {
     return successResponse(await this.chapterService.create(titleId, name));
   }
@@ -43,7 +43,7 @@ export class ChapterController {
   async updateById(
     @Param('titleId', ParseIntPipe) titleId: number,
     @Param('id', ParseIntPipe) id: number,
-    @Body() { name }: ChapterBOdyModel,
+    @Body() { name }: ChapterBodyModel,
   ) {
     return successResponse(
       await this.chapterService.updateById(titleId, id, name),

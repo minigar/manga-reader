@@ -8,6 +8,7 @@ import { ListService } from './list.service';
 import { TitleService } from './title.service';
 import { TitleCommentsService } from './title-comments.service';
 import { ChapterService } from './chapter.service';
+import { PageService } from './page.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -19,6 +20,7 @@ import { ChapterService } from './chapter.service';
     TitleService,
     TitleCommentsService,
     ChapterService,
+    PageService,
   ],
   exports: [
     UserService,
@@ -28,6 +30,7 @@ import { ChapterService } from './chapter.service';
     TitleService,
     TitleCommentsService,
     ChapterService,
+    PageService,
   ],
 })
 export class ServiceModule {}

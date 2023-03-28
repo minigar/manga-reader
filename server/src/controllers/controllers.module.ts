@@ -9,6 +9,7 @@ import { ListController } from './list.controller';
 import { TitleController } from './title.controller';
 import { TitleCommentsController } from './title-comments.controller';
 import { ChapterController } from './chapter.controller';
+import { PageController } from './page.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -20,6 +21,7 @@ import { ChapterController } from './chapter.controller';
     TitleController,
     TitleCommentsController,
     ChapterController,
+    PageController,
   ],
 })
 export class ControllersModule {}
