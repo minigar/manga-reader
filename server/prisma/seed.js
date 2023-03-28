@@ -46,7 +46,6 @@ async function seed() {
   const onePiece = await prisma.title.create({
     data: {
       name: 'One Piece',
-      type: 'anime',
       description:
         "it's manga about one guy who wanted to be the Pirate King. But if you are real capitan you need a team, right? So he start to earn him nakama's",
     },
@@ -55,7 +54,6 @@ async function seed() {
   const onePunchman = await prisma.title.create({
     data: {
       name: 'Onepunch-Man',
-      type: 'anime',
       description:
         "it's manga about one guy who can beat each mobster by one punch, but he hero cuz boring",
     },
@@ -65,6 +63,7 @@ async function seed() {
     where: {
       id: list1.id,
     },
+
     data: {
       titles: {
         connect: {

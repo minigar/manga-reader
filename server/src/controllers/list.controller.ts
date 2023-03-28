@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Put,
 } from '@nestjs/common';
@@ -49,5 +50,16 @@ export class ListController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     return successResponse(await this.listService.deleteById(userId, id));
+  }
+
+  @Patch(':id/titles/:titleId')
+  async addToList(
+    @CurrentUser() { userId },
+    @Param('id', ParseIntPipe) id: number,
+    @Param('titleId', ParseIntPipe) titleId: number,
+  ) {
+    return successResponse(
+      await this.listService.addToList(userId, id, titleId),
+    );
   }
 }

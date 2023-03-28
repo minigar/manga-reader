@@ -3,6 +3,16 @@ import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { UserErrorKey } from '../controllers/errorKeys/UserErrorKey';
 import { ListErrorKey } from '../controllers/errorKeys/ListErrorKey';
+import { TitleErrorKey } from 'src/controllers/errorKeys';
+
+const ListIncludes = {
+  titles: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+};
 
 @Injectable()
 export class ListService {
@@ -12,7 +22,10 @@ export class ListService {
 
     if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
 
-    const lists = await this.db.list.findMany({ where: { userId } });
+    const lists = await this.db.list.findMany({
+      where: { userId },
+      include: ListIncludes,
+    });
 
     return lists;
   }
@@ -22,7 +35,10 @@ export class ListService {
 
     if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
 
-    const list = await this.db.list.findFirst({ where: { id } });
+    const list = await this.db.list.findFirst({
+      where: { id },
+      include: ListIncludes,
+    });
 
     if (!list) throw new BusinessError(ListErrorKey.LIST_NOT_FOUND);
 
@@ -56,6 +72,7 @@ export class ListService {
     return await this.db.list.update({
       where: { id },
       data: { name },
+      include: ListIncludes,
     });
   }
 
@@ -69,5 +86,35 @@ export class ListService {
     if (!list) throw new BusinessError(ListErrorKey.LIST_NOT_FOUND);
 
     return;
+  }
+
+  async addToList(userId: number, id: number, titleId: number) {
+    const user = await this.db.user.findFirst({ where: { id: userId } });
+
+    if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
+
+    const list = await this.db.list.findFirst({ where: { id } });
+
+    if (!list) throw new BusinessError(ListErrorKey.LIST_NOT_FOUND);
+
+    const title = await this.db.title.findFirst({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
+    const updatedList = await this.db.list.update({
+      where: {
+        id,
+      },
+      data: {
+        titles: {
+          connect: {
+            id: titleId,
+          },
+        },
+      },
+      include: ListIncludes,
+    });
+    console.log(updatedList);
+    return updatedList;
   }
 }
