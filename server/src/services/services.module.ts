@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ListService } from './list.service';
 import { TitleService } from './title.service';
 import { TitleCommentsService } from './title-comments.service';
+import { ChapterService } from './chapter.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -17,6 +18,7 @@ import { TitleCommentsService } from './title-comments.service';
     ListService,
     TitleService,
     TitleCommentsService,
+    ChapterService,
   ],
   exports: [
     UserService,
@@ -25,6 +27,7 @@ import { TitleCommentsService } from './title-comments.service';
     ListService,
     TitleService,
     TitleCommentsService,
+    ChapterService,
   ],
 })
 export class ServiceModule {}

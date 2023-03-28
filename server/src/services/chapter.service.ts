@@ -1,0 +1,66 @@
+import { Injectable } from '@nestjs/common';
+import { DatabaseService } from 'src/data/database.service';
+import { BusinessError } from '../errors/businessErrors/businessError';
+import { ChapterErrorKey } from 'src/controllers/errorKeys/ChapterErrorKey';
+
+@Injectable()
+export class ChapterService {
+  constructor(private readonly db: DatabaseService) {}
+
+  async getList(titleId: number) {
+    const chapters = await this.db.chapter.findMany({ where: { titleId } });
+
+    return chapters;
+  }
+
+  async getById(id: number) {
+    const chapter = await this.db.chapter.findFirst({ where: { id } });
+
+    if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    return chapter;
+  }
+
+  async create(titleId: number, name: string) {
+    const title = await this.db.title.findFirst({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    const chapter = await this.db.chapter.create({
+      data: {
+        name,
+        titleId,
+      },
+    });
+
+    return chapter;
+  }
+
+  async updateById(titleId: number, id: number, name: string) {
+    const title = await this.db.title.findFirst({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    const chapter = await this.db.chapter.findFirst({ where: { id } });
+
+    if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    const updatedChapter = await this.db.chapter.update({
+      where: { id },
+      data: {
+        name,
+      },
+    });
+
+    return updatedChapter;
+  }
+
+  async delete(id: number) {
+    const chapter = await this.db.chapter.findFirst({ where: { id } });
+
+    if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    await this.db.chapter.delete({ where: { id } });
+    return;
+  }
+}
