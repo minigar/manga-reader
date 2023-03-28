@@ -7,6 +7,7 @@ import { UserController } from './user.controller';
 import { AuthController } from './auth.controller';
 import { ListController } from './list.controller';
 import { TitleController } from './title.controller';
+import { TitleCommentsController } from './title-comments.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -16,6 +17,7 @@ import { TitleController } from './title.controller';
     AuthController,
     ListController,
     TitleController,
+    TitleCommentsController,
   ],
 })
 export class ControllersModule {}

@@ -6,10 +6,25 @@ import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { ListService } from './list.service';
 import { TitleService } from './title.service';
+import { TitleCommentsService } from './title-comments.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
-  providers: [UserService, AuthService, JwtService, ListService, TitleService],
-  exports: [UserService, AuthService, JwtService, ListService, TitleService],
+  providers: [
+    UserService,
+    AuthService,
+    JwtService,
+    ListService,
+    TitleService,
+    TitleCommentsService,
+  ],
+  exports: [
+    UserService,
+    AuthService,
+    JwtService,
+    ListService,
+    TitleService,
+    TitleCommentsService,
+  ],
 })
 export class ServiceModule {}
