@@ -28,7 +28,7 @@ export class ChapterController {
     @Param('titleId', ParseIntPipe) titleId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return successResponse(await this.chapterService.getById(id));
+    return successResponse(await this.chapterService.getById(titleId, id));
   }
 
   @Post()
