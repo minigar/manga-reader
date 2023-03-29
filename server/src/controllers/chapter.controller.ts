@@ -34,9 +34,11 @@ export class ChapterController {
   @Post()
   async create(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Body() { name }: ChapterBodyModel,
+    @Body() { name, number, volume }: ChapterBodyModel,
   ) {
-    return successResponse(await this.chapterService.create(titleId, name));
+    return successResponse(
+      await this.chapterService.create(titleId, name, number, volume),
+    );
   }
 
   @Put(':id')

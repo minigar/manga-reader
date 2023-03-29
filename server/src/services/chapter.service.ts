@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import { ChapterErrorKey } from 'src/controllers/errorKeys/ChapterErrorKey';
+import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
 
 @Injectable()
 export class ChapterService {
@@ -21,14 +22,16 @@ export class ChapterService {
     return chapter;
   }
 
-  async create(titleId: number, name: string) {
+  async create(titleId: number, name: string, number: number, volume: number) {
     const title = await this.db.title.findFirst({ where: { id: titleId } });
 
-    if (!title) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.create({
       data: {
         name,
+        number,
+        volume,
         titleId,
       },
     });

@@ -146,7 +146,7 @@ export class AuthService {
         },
         {
           secret: process.env.SECRET || 'secret',
-          expiresIn: '15m',
+          expiresIn: '1d',
         },
       ),
       await this.jwtService.signAsync(

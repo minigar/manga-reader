@@ -57,8 +57,10 @@ model Title {
 }
 
 model Chapter {
-  id   Int    @id @default(autoincrement())
-  name String
+  id     Int    @id @default(autoincrement())
+  name   String
+  number Int
+  volume Int
 
   Title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
   titleId Int
