@@ -14,6 +14,7 @@ export class ChapterService {
     return chapters;
   }
 
+  // Can get by chapter number + titleId :TODO
   async getById(titleId: number, id: number) {
     const title = await this.db.title.findFirst({ where: { id: titleId } });
 

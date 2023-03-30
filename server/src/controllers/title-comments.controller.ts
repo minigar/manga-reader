@@ -23,17 +23,17 @@ export class TitleCommentsController {
     return successResponse(await this.titleCommentsService.getList(titleId));
   }
 
-  @Post(':parantId?')
+  @Post(':parentId?')
   async create(
     @Body('message') message: string,
     @Param('titleId', ParseIntPipe) titleId: number,
     @CurrentUser() { userId },
-    @Param('parantId') parantId?: number,
+    @Param('parentId') parentId?: number,
   ) {
     return successResponse(
       await this.titleCommentsService.create(
         titleId,
-        Number(parantId),
+        Number(parentId),
         userId,
         message,
       ),

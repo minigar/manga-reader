@@ -10,6 +10,7 @@ import { TitleController } from './title.controller';
 import { TitleCommentsController } from './title-comments.controller';
 import { ChapterController } from './chapter.controller';
 import { PageController } from './page.controller';
+import { PageCommentsController } from './page-comments.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -22,6 +23,7 @@ import { PageController } from './page.controller';
     TitleCommentsController,
     ChapterController,
     PageController,
+    PageCommentsController,
   ],
 })
 export class ControllersModule {}

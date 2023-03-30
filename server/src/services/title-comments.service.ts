@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
-import { TitleCommentsErrorKey } from 'src/controllers/errorKeys/TitleCommentsErrorKey';
+import { CommentsErrorKey } from 'src/controllers/errorKeys/CommentsErrorKey';
 import { GeneralErrorKey } from 'src/controllers/errorKeys/GeneralErrorKey';
 
 @Injectable()
@@ -51,8 +51,7 @@ export class TitleCommentsService {
   async updateById(userId: number, id: number, message: string) {
     const comment = await this.db.titleComment.findFirst({ where: { id } });
 
-    if (!comment)
-      throw new BusinessError(TitleCommentsErrorKey.COMMENT_NOT_EXIST);
+    if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
 
     const isMatches = userId === comment.userId;
 
@@ -71,8 +70,7 @@ export class TitleCommentsService {
   async deleteById(userId: number, id: number) {
     const comment = await this.db.titleComment.findFirst({ where: { id } });
 
-    if (!comment)
-      throw new BusinessError(TitleCommentsErrorKey.COMMENT_NOT_EXIST);
+    if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
 
     const isMatches = userId === comment.userId;
 
