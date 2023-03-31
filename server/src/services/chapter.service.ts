@@ -3,13 +3,17 @@ import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import { ChapterErrorKey } from 'src/controllers/errorKeys/ChapterErrorKey';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChapterService {
   constructor(private readonly db: DatabaseService) {}
 
-  async getList(titleId: number) {
-    const chapters = await this.db.chapter.findMany({ where: { titleId } });
+  async getList(titleId: number, sortOrder: Prisma.SortOrder) {
+    const chapters = await this.db.chapter.findMany({
+      where: { titleId },
+      orderBy: [{ volume: sortOrder || 'asc' }, { number: 'asc' }],
+    });
 
     return chapters;
   }

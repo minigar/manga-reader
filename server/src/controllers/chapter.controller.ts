@@ -7,19 +7,26 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Public } from 'src/common/decorators ';
 import { successResponse } from 'src/helpers/success-response';
 import { ChapterService } from 'src/services/chapter.service';
 import { ChapterBodyModel } from '../models/Chapter.dto';
+import { SortBodyModel } from '../models/SortBodyModel';
 
 @Controller('titles/:titleId/chapters')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) {}
   @Get()
   @Public()
-  async getList(@Param('titleId', ParseIntPipe) titleId: number) {
-    return successResponse(await this.chapterService.getList(titleId));
+  async getList(
+    @Param('titleId', ParseIntPipe) titleId: number,
+    @Query() { sortOrder }: SortBodyModel,
+  ) {
+    return successResponse(
+      await this.chapterService.getList(titleId, sortOrder),
+    );
   }
 
   @Get(':id')
