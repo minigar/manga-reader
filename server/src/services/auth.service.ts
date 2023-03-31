@@ -7,12 +7,14 @@ import { JwtService } from '@nestjs/jwt';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import { AuthErrorKey, UserErrorKey } from 'src/controllers/errorKeys';
 import { v4 as uuid } from 'uuid';
+import { ListService } from './list.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly db: DatabaseService,
     private jwtService: JwtService,
+    private readonly listService: ListService,
   ) {}
 
   async singUp({ name, email, password }: UserBodyModel): Promise<Tokens> {
@@ -29,12 +31,16 @@ export class AuthService {
       },
     });
 
+    await this.createRequiredUserLists(createdUser.id);
+
     const tokens = await this.getTokens(
       createdUser.id,
       createdUser.email,
       createdUser.name,
     );
+
     await this.updateRefreshTokenHash(createdUser.id, tokens.refresh_token);
+
     return tokens;
   }
 
@@ -189,5 +195,14 @@ export class AuthService {
         hashedRT: hash,
       },
     });
+  }
+
+  async createRequiredUserLists(userId: number) {
+    await this.listService.create(userId, 'All');
+    await this.listService.create(userId, 'Read');
+    await this.listService.create(userId, 'Planned');
+    await this.listService.create(userId, 'Quit');
+    await this.listService.create(userId, 'Done');
+    await this.listService.create(userId, 'Favorites');
   }
 }

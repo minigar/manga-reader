@@ -17,6 +17,9 @@ export class UserService {
   async getById(id: number) {
     const user = await this.db.user.findFirst({
       where: { id },
+      include: {
+        lists: true,
+      },
     });
 
     if (!user) {
