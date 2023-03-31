@@ -7,11 +7,13 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { successResponse } from 'src/helpers/success-response';
 import { PageService } from '../services/page.service';
 import { Public } from '../common/decorators /Public.decorator';
 import { PageBodyModel, PageUpdateBodyModel } from 'src/models/Page.dto';
+import { PaginationBodyModel } from '../models/Pagination.dto';
 
 @Controller('titles/:titleId/chapters/:chapterId/pages')
 export class PageController {
@@ -21,8 +23,16 @@ export class PageController {
   async getList(
     @Param('titleId', ParseIntPipe) titleId: number,
     @Param('chapterId', ParseIntPipe) chapterId: number,
+    @Query() { page, perPage }: PaginationBodyModel,
   ) {
-    return successResponse(await this.pageService.getList(titleId, chapterId));
+    return successResponse(
+      await this.pageService.getList(
+        titleId,
+        chapterId,
+        Number(page),
+        Number(perPage),
+      ),
+    );
   }
 
   @Get(':id')

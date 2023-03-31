@@ -8,14 +8,29 @@ import { GeneralErrorKey } from 'src/controllers/errorKeys/GeneralErrorKey';
 @Injectable()
 export class TitleCommentsService {
   constructor(private readonly db: DatabaseService) {}
-  async getList(titleId: number, parentId: number | null = null) {
+  async getList(
+    titleId: number,
+    page: number,
+    perPage: number,
+    parentId: number | null = null,
+  ) {
+    const offset = (page - 1) * perPage;
+
     const comments = await this.db.titleComment.findMany({
       where: { titleId, parentId },
+      skip: offset,
+      take: perPage,
+      orderBy: { createdAt: 'asc' },
     });
 
     const childComments = await Promise.all(
       comments.map(async (comment) => {
-        const nestedComments = await this.getList(titleId, comment.id);
+        const nestedComments = await this.getList(
+          titleId,
+          page,
+          perPage,
+          comment.id,
+        );
         return {
           ...comment,
           clidren: nestedComments,

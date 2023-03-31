@@ -9,7 +9,12 @@ import { GeneralErrorKey } from '../controllers/errorKeys/GeneralErrorKey';
 export class PageService {
   constructor(private readonly db: DatabaseService) {}
 
-  async getList(titleId: number, chapterId: number) {
+  async getList(
+    titleId: number,
+    chapterId: number,
+    page: number,
+    perPage: number,
+  ) {
     const chapter = await this.db.chapter.findFirst({
       where: { id: chapterId },
     });
@@ -18,7 +23,14 @@ export class PageService {
 
     if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
-    const pages = await this.db.page.findMany({ where: { chapterId } });
+    const offset = (page - 1) * perPage;
+
+    const pages = await this.db.page.findMany({
+      where: { chapterId },
+      skip: offset,
+      take: perPage,
+      orderBy: { number: 'asc' },
+    });
 
     return pages;
   }

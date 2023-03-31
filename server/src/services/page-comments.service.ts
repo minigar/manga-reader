@@ -11,14 +11,29 @@ import { UserErrorKey } from '../controllers/errorKeys/UserErrorKey';
 @Injectable()
 export class PageCommentsService {
   constructor(private readonly db: DatabaseService) {}
-  async getList(pageId: number, parentId: number | null = null) {
+  async getList(
+    pageId: number,
+    page: number,
+    perPage: number,
+    parentId: number | null = null,
+  ) {
+    const offset = (page - 1) * perPage;
+
     const comments = await this.db.pageComment.findMany({
       where: { pageId, parentId },
+      skip: offset,
+      take: perPage,
+      orderBy: { createdAt: 'asc' },
     });
 
     const childComments = await Promise.all(
       comments.map(async (comment) => {
-        const nestedComments = await this.getList(pageId, comment.id);
+        const nestedComments = await this.getList(
+          pageId,
+          page,
+          perPage,
+          comment.id,
+        );
         return {
           ...comment,
           clidren: nestedComments,

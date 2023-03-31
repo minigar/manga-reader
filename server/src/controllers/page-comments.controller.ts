@@ -7,11 +7,13 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Public } from 'src/common/decorators ';
 import { successResponse } from 'src/helpers/success-response';
 import { CurrentUser } from '../common/decorators /CurrentUser.decorator';
 import { PageCommentsService } from '../services/page-comments.service';
+import { PaginationBodyModel } from '../models/Pagination.dto';
 
 @Controller('titles/:titleId/chapters/:chapterId/pages/:pageId/comments')
 export class PageCommentsController {
@@ -19,8 +21,17 @@ export class PageCommentsController {
 
   @Public()
   @Get()
-  async getList(@Param('pageId', ParseIntPipe) pageId: number) {
-    return successResponse(await this.pageCommentsService.getList(pageId));
+  async getList(
+    @Param('pageId', ParseIntPipe) pageId: number,
+    @Query() { page, perPage }: PaginationBodyModel,
+  ) {
+    return successResponse(
+      await this.pageCommentsService.getList(
+        pageId,
+        Number(page),
+        Number(perPage),
+      ),
+    );
   }
 
   @Post(':parentId?')
