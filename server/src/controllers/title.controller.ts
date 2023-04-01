@@ -14,6 +14,7 @@ import { successResponse } from 'src/helpers/success-response';
 import { TitleBodyModel } from 'src/models/Title.dto';
 import { TitleService } from 'src/services/title.service';
 import { PaginationBodyModel } from '../models/Pagination.dto';
+import { TitleSortBodyModel } from 'src/models/SortBodyModel';
 
 @Controller('titles')
 export class TitleController {
@@ -21,9 +22,17 @@ export class TitleController {
 
   @Public()
   @Get()
-  async getList(@Query() { page, perPage }: PaginationBodyModel) {
+  async getList(
+    @Query() { page, perPage }: PaginationBodyModel,
+    @Query() { sortBy, sortOrder }: TitleSortBodyModel,
+  ) {
     return successResponse(
-      await this.titleServie.getList(Number(page), Number(perPage)),
+      await this.titleServie.getList(
+        Number(page),
+        Number(perPage),
+        sortBy,
+        sortOrder,
+      ),
     );
   }
 

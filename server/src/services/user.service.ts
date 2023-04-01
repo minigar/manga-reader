@@ -4,6 +4,7 @@ import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { AuthErrorKey, UserErrorKey } from 'src/controllers/errorKeys';
 import { UserUpdate } from '../models/User.dto';
 import * as bcrypt from 'bcrypt';
+import { GeneralErrorKey } from 'src/controllers/errorKeys/GeneralErrorKey';
 
 @Injectable()
 export class UserService {
@@ -29,16 +30,19 @@ export class UserService {
     return user;
   }
 
-  async updateById(id: number, payload: UserUpdate) {
+  async updateById(id: number, payload: UserUpdate, userId: number) {
     const user = await this.db.user.findFirst({ where: { id } });
 
     if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
 
-    const isMatches = await bcrypt.compare(payload.password, user.password);
+    const isPassMatches = await bcrypt.compare(payload.password, user.password);
 
-    if (!isMatches) {
+    if (!isPassMatches)
       throw new BusinessError(AuthErrorKey.PASSWORDS_ARE_NOT_SAME);
-    }
+
+    const isIdMatches = userId === id;
+
+    if (!isIdMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     if (payload.email !== user.email)
       throw new BusinessError(AuthErrorKey.EMAIL_NOT_MACTHES);
@@ -53,8 +57,17 @@ export class UserService {
     });
   }
 
-  async deleteById(id: number) {
+  async deleteById(id: number, userId: number) {
+    const user = await this.db.user.findFirst({ where: { id } });
+
+    if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
+
+    const isIdMacthes = id === userId;
+
+    if (!isIdMacthes) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
+
     await this.db.user.delete({ where: { id } });
+
     return;
   }
 }

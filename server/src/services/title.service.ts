@@ -7,13 +7,18 @@ import { TitleBodyModel } from 'src/models/Title.dto';
 @Injectable()
 export class TitleService {
   constructor(private readonly db: DatabaseService) {}
-  async getList(page: number, perPage: number) {
+  async getList(
+    page: number,
+    perPage: number,
+    sortBy: string,
+    sortOrder: string,
+  ) {
     const offset = (page - 1) * perPage;
 
     const titles = await this.db.title.findMany({
       skip: offset,
       take: perPage,
-      orderBy: { name: 'asc' },
+      orderBy: { [sortBy || 'name']: sortOrder || 'asc' },
     });
 
     return titles;
