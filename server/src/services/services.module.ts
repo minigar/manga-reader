@@ -10,6 +10,7 @@ import { TitleCommentsService } from './title-comments.service';
 import { ChapterService } from './chapter.service';
 import { PageService } from './page.service';
 import { PageCommentsService } from './page-comments.service';
+import { GenreService } from './genre.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -23,6 +24,7 @@ import { PageCommentsService } from './page-comments.service';
     ChapterService,
     PageService,
     PageCommentsService,
+    GenreService,
   ],
   exports: [
     UserService,
@@ -34,6 +36,7 @@ import { PageCommentsService } from './page-comments.service';
     ChapterService,
     PageService,
     PageCommentsService,
+    GenreService,
   ],
 })
 export class ServiceModule {}

@@ -40,6 +40,17 @@ model List {
   updatedAt DateTime @updatedAt
 }
 
+model Genre {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  titles Title[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Title {
   id          Int         @id @default(autoincrement())
   name        String      @unique
@@ -48,6 +59,7 @@ model Title {
   status      TitleStatus @default(ANNOUNCEMENT)
   yearRelease Int         @default(1990)
 
+  genres   Genre[]
   chapters Chapter[]
   comments TitleComment[]
   list     List[]

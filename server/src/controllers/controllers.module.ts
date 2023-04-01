@@ -11,6 +11,7 @@ import { TitleCommentsController } from './title-comments.controller';
 import { ChapterController } from './chapter.controller';
 import { PageController } from './page.controller';
 import { PageCommentsController } from './page-comments.controller';
+import { GenreController } from './genre.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -24,6 +25,7 @@ import { PageCommentsController } from './page-comments.controller';
     ChapterController,
     PageController,
     PageCommentsController,
+    GenreController,
   ],
 })
 export class ControllersModule {}

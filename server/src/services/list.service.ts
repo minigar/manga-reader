@@ -86,6 +86,8 @@ export class ListService {
 
     if (!list) throw new BusinessError(ListErrorKey.LIST_NOT_FOUND);
 
+    await this.db.list.delete({ where: { id } });
+
     return;
   }
 
