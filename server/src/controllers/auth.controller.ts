@@ -21,9 +21,14 @@ export class AuthController {
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
   async singUp(
-    @Body() { name, email, password }: UserBodyModel,
+    @Body() { name, email, password, avatarImgUri }: UserBodyModel,
   ): Promise<Tokens> {
-    return await this.authService.singUp({ name, email, password });
+    return await this.authService.singUp({
+      name,
+      email,
+      password,
+      avatarImgUri,
+    });
   }
 
   @Public()

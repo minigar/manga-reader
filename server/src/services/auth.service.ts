@@ -17,7 +17,12 @@ export class AuthService {
     private readonly listService: ListService,
   ) {}
 
-  async singUp({ name, email, password }: UserBodyModel): Promise<Tokens> {
+  async singUp({
+    name,
+    email,
+    password,
+    avatarImgUri,
+  }: UserBodyModel): Promise<Tokens> {
     const password_hash = await this.hashData(password);
     const user = await this.db.user.findFirst({ where: { email } });
     if (user) {
@@ -28,6 +33,7 @@ export class AuthService {
         name,
         email,
         password: password_hash,
+        avatarImgUri,
       },
     });
 

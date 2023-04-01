@@ -47,6 +47,8 @@ export class UserService {
       where: { id },
       data: {
         name: payload.name,
+        email: payload.email,
+        avatarImgUri: payload.avatarImgUri,
       },
     });
   }
