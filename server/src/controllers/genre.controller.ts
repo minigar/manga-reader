@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { successResponse } from 'src/helpers/success-response';
 import { GenreService } from '../services/genre.service';
-import { GenreBodeModel } from '../models/Genre.dto';
+import { GenreBodyModel } from '../models/Genre.dto';
 import { Public } from 'src/common/decorators ';
 
 @Controller('genres')
@@ -31,14 +31,14 @@ export class GenreController {
   }
 
   @Post()
-  async create(@Body() { name, description }: GenreBodeModel) {
+  async create(@Body() { name, description }: GenreBodyModel) {
     return successResponse(await this.genreService.create(name, description));
   }
 
   @Put(':id')
   async updateById(
     @Param('id', ParseIntPipe) id: number,
-    @Body() { name, description }: GenreBodeModel,
+    @Body() { name, description }: GenreBodyModel,
   ) {
     return successResponse(
       await this.genreService.updateById(id, name, description),
@@ -51,10 +51,10 @@ export class GenreController {
   }
 
   @Patch(':id/titles/:titleId')
-  async addToList(
+  async addTitleTo(
     @Param('id', ParseIntPipe) id: number,
     @Param('titleId', ParseIntPipe) titleId: number,
   ) {
-    return successResponse(await this.genreService.addToList(id, titleId));
+    return successResponse(await this.genreService.addTitleTo(id, titleId));
   }
 }

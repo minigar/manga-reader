@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
 
-export class GenreBodeModel {
+export class GenreBodyModel {
   @IsString()
   name: string;
 

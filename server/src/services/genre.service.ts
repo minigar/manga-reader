@@ -8,7 +8,9 @@ import { GenreErrorKey } from '../controllers/errorKeys/GenreErrorKey';
 export class GenreService {
   constructor(private readonly db: DatabaseService) {}
   async getList() {
-    const genres = await this.db.genre.findMany();
+    const genres = await this.db.genre.findMany({
+      include: { titles: { select: { name: true } } },
+    });
 
     return genres;
   }
@@ -19,6 +21,7 @@ export class GenreService {
       include: {
         titles: {
           orderBy: {}, //TODO
+          select: { name: true },
         },
       },
     });
@@ -68,7 +71,7 @@ export class GenreService {
     return;
   }
 
-  async addToList(id: number, titleId: number) {
+  async addTitleTo(id: number, titleId: number) {
     const title = await this.db.title.findFirst({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
