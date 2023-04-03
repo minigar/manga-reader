@@ -23,36 +23,19 @@ export class TitleController {
 
   @Public()
   @Get()
-  // async getList(
-  //   @Query() { page, perPage }: PaginationBodyModel,
-  //   @Query() { sortBy, sortOrder }: TitleSortBodyModel, // @Query('genres') genres: GenreBodyModel[],
-  //   @Query('genreIds') genreIdOrArray: number[],
-  // ) {
-  //   return successResponse(
-  //     await this.titleServie.getList(
-  //       Number(page),
-  //       Number(perPage),
-  //       sortBy,
-  //       sortOrder,
-  //       genreIdOrArray,
-  //     ),
-  //   );
-  // }
   async getList(
     @Query() { page, perPage }: PaginationBodyModel,
-    @Query() { sortBy, sortOrder }: TitleSortBodyModel, // @Query('genres') genres: GenreBodyModel[],
-    @Query('genres') genres: GenreQuerySort,
+    @Query() { sortBy, sortOrder }: TitleSortBodyModel,
+    @Query('genres') genres?: GenreQuerySort,
   ) {
-    console.log(genres.include, ' Include at controller');
-    console.log(genres.exclude, ' Exclude at controller');
     return successResponse(
       await this.titleServie.getList(
         Number(page),
         Number(perPage),
         sortBy,
         sortOrder,
-        genres.include,
-        genres.exclude,
+        genres?.include,
+        genres?.exclude,
       ),
     );
   }
