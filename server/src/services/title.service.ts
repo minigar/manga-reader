@@ -3,6 +3,7 @@ import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
 import { TitleBodyModel } from 'src/models/Title.dto';
+import { GenreErrorKey } from 'src/controllers/errorKeys/GenreErrorKey';
 
 @Injectable()
 export class TitleService {
@@ -12,7 +13,8 @@ export class TitleService {
     perPage: number,
     sortBy: string,
     sortOrder: string,
-    genreIdOrArray: number[],
+    include?: number[],
+    exclude?: number[],
   ) {
     const offset = (page - 1) * perPage;
     const pagination = {
@@ -28,8 +30,32 @@ export class TitleService {
       },
     };
 
-    if (!genreIdOrArray) {
+    const defaultExcludeGenre = await this.db.genre.findFirst({
+      where: { name: 'default-exclude' },
+      select: { id: true },
+    });
+
+    if (!exclude) exclude = [defaultExcludeGenre.id];
+
+    const parseExcludeOne = Number(exclude[0]);
+
+    let parseExcludeMany: number[];
+
+    if (exclude.length > 1)
+      parseExcludeMany = exclude.map((str) => parseInt(str.toString(), 10));
+
+    if (!include) {
       return await this.db.title.findMany({
+        where: {
+          genres: {
+            none: {
+              id: {
+                in: parseExcludeMany || parseExcludeOne,
+              },
+            },
+          },
+        },
+
         skip: pagination.skip,
         take: pagination.take,
         orderBy: pagination.orderBy,
@@ -37,18 +63,27 @@ export class TitleService {
       });
     }
 
-    let parsedGenreIds = [Number(genreIdOrArray)];
+    await this.validateGenresIds(include);
+    await this.validateGenresIds(exclude);
 
-    if (genreIdOrArray.length > 1) {
-      parsedGenreIds = genreIdOrArray.map(Number);
-    }
+    const parseIncludeOne = Number(include[0]);
+
+    let parseIncludeMany: number[];
+
+    if (include.length > 1)
+      parseIncludeMany = include.map((str) => parseInt(str.toString(), 10));
 
     return await this.db.title.findMany({
       where: {
         genres: {
           some: {
             id: {
-              in: parsedGenreIds,
+              in: parseIncludeMany || parseIncludeOne,
+            },
+          },
+          none: {
+            id: {
+              in: parseExcludeMany || parseExcludeOne,
             },
           },
         },
@@ -116,5 +151,25 @@ export class TitleService {
     await this.db.title.delete({ where: { id } });
 
     return;
+  }
+
+  async validateGenresIds(arrayOfIds: number[]) {
+    for (let i = 0; i < arrayOfIds.length; i++) {
+      const currentElm = Number(arrayOfIds[i]);
+
+      console.log(currentElm);
+
+      if (Number.isNaN(currentElm))
+        throw new BusinessError('Array of genre ids query all must me number');
+
+      const genre = await this.db.genre.findFirst({
+        where: { id: currentElm },
+      });
+
+      if (!genre)
+        throw new BusinessError(
+          GenreErrorKey.GENRE_NOT_EXSITS + ` id: ${currentElm}`,
+        );
+    }
   }
 }

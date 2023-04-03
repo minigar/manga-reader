@@ -8,3 +8,10 @@ export class GenreBodyModel {
   @IsString()
   description?: string;
 }
+
+export class GenreQuerySort {
+  @IsOptional()
+  include?: number[];
+  @IsOptional()
+  exclude?: number[];
+}
