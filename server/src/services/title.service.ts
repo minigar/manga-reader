@@ -157,8 +157,6 @@ export class TitleService {
     for (let i = 0; i < arrayOfIds.length; i++) {
       const currentElm = Number(arrayOfIds[i]);
 
-      console.log(currentElm);
-
       if (Number.isNaN(currentElm))
         throw new BusinessError('Array of genre ids query all must me number');
 
