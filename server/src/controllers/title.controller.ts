@@ -24,7 +24,8 @@ export class TitleController {
   @Get()
   async getList(
     @Query() { page, perPage }: PaginationBodyModel,
-    @Query() { sortBy, sortOrder }: TitleSortBodyModel,
+    @Query() { sortBy, sortOrder }: TitleSortBodyModel, // @Query('genres') genres: GenreBodyModel[],
+    @Query('genreIds') genreIdOrArray: number[],
   ) {
     return successResponse(
       await this.titleServie.getList(
@@ -32,6 +33,7 @@ export class TitleController {
         Number(perPage),
         sortBy,
         sortOrder,
+        genreIdOrArray,
       ),
     );
   }

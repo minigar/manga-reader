@@ -12,16 +12,53 @@ export class TitleService {
     perPage: number,
     sortBy: string,
     sortOrder: string,
+    genreIdOrArray: number[],
   ) {
     const offset = (page - 1) * perPage;
-
-    const titles = await this.db.title.findMany({
+    const pagination = {
       skip: offset,
       take: perPage,
       orderBy: { [sortBy || 'name']: sortOrder || 'asc' },
-    });
+      include: {
+        genres: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    };
 
-    return titles;
+    if (!genreIdOrArray) {
+      return await this.db.title.findMany({
+        skip: pagination.skip,
+        take: pagination.take,
+        orderBy: pagination.orderBy,
+        include: pagination.include,
+      });
+    }
+
+    let parsedGenreIds = [Number(genreIdOrArray)];
+
+    if (genreIdOrArray.length > 1) {
+      parsedGenreIds = genreIdOrArray.map(Number);
+    }
+
+    return await this.db.title.findMany({
+      where: {
+        genres: {
+          some: {
+            id: {
+              in: parsedGenreIds,
+            },
+          },
+        },
+      },
+
+      skip: pagination.skip,
+      take: pagination.take,
+      orderBy: pagination.orderBy,
+      include: pagination.include,
+    });
   }
 
   async getById(id: number) {
