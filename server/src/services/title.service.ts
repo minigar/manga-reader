@@ -4,6 +4,7 @@ import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
 import { TitleBodyModel } from 'src/models/Title.dto';
 import { GenreErrorKey } from 'src/controllers/errorKeys/GenreErrorKey';
+import { TitleType } from '@prisma/client';
 
 @Injectable()
 export class TitleService {
@@ -15,6 +16,7 @@ export class TitleService {
     sortOrder: string,
     include?: number[],
     exclude?: number[],
+    types?: TitleType[],
   ) {
     const offset = (page - 1) * perPage;
     const pagination = {
@@ -29,6 +31,11 @@ export class TitleService {
         },
       },
     };
+
+    if (types) {
+      await this.validateTypes(types);
+      console.log('valid');
+    }
 
     const defaultExcludeGenre = await this.db.genre.findFirst({
       where: { name: 'default-exclude' },
@@ -53,6 +60,9 @@ export class TitleService {
                 in: parseExcludeMany || parseExcludeOne,
               },
             },
+          },
+          type: {
+            in: types,
           },
         },
 
@@ -86,6 +96,9 @@ export class TitleService {
               in: parseExcludeMany || parseExcludeOne,
             },
           },
+        },
+        type: {
+          in: types,
         },
       },
 
@@ -169,5 +182,20 @@ export class TitleService {
           GenreErrorKey.GENRE_NOT_EXSITS + ` id: ${currentElm}`,
         );
     }
+  }
+
+  async validateTypes(array: string[]) {
+    for (let i = 0; i < array.length; i++) {
+      const currentElm = array[i];
+
+      const isElmContainsType = this.isType(currentElm);
+
+      if (!isElmContainsType)
+        throw new BusinessError('Array of type must be only as titles types!');
+    }
+  }
+
+  isType(value: string): value is TitleType {
+    return Object.values(TitleType).includes(value as TitleType);
   }
 }
