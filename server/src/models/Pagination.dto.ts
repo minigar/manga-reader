@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsNumberString } from 'class-validator';
+import { IsNumberString, IsOptional } from 'class-validator';
 
 export class PaginationBodyModel {
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumberString()
   page: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumberString()
   perPage: number;
 }

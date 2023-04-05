@@ -17,6 +17,7 @@ import { PaginationBodyModel } from '../models/Pagination.dto';
 import { TitleSortBodyModel } from 'src/models/SortBodyModel';
 import { GenreQuerySort } from 'src/models/Genre.dto';
 import { TitleStatus, TitleType } from '@prisma/client';
+import { ChapterQuerySort } from 'src/models/Chapter.dto';
 
 @Controller('titles')
 export class TitleController {
@@ -30,17 +31,20 @@ export class TitleController {
     @Query('genres') genres?: GenreQuerySort,
     @Query('types') types?: TitleType[],
     @Query('status') status?: TitleStatus[],
+    @Query('chapters') chapters?: ChapterQuerySort,
   ) {
     return successResponse(
       await this.titleServie.getList(
-        Number(page),
-        Number(perPage),
+        page,
+        perPage,
         sortBy,
         sortOrder,
         genres?.include,
         genres?.exclude,
         types,
         status,
+        // chapters?.chapterMin,
+        // chapters?.chapterMax,
       ),
     );
   }

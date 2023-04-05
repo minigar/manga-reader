@@ -10,21 +10,30 @@ import { TitleStatus, TitleType } from '@prisma/client';
 export class TitleService {
   constructor(private readonly db: DatabaseService) {}
   async getList(
-    page: number,
-    perPage: number,
-    sortBy: string,
-    sortOrder: string,
+    page?: number,
+    perPage?: number,
+    sortBy?: string,
+    sortOrder?: string,
     include?: number[],
     exclude?: number[],
     types?: TitleType[],
     status?: TitleStatus[],
   ) {
+    let defaultExcludeGenre: { id: number };
     let parseExcludeMany: number[];
-    const offset = (page - 1) * perPage;
+    let parseIncludeMany: number[];
+    let skip: number;
+    let take: number;
+
+    if (page && perPage) {
+      take = Number(perPage);
+      skip = (Number(page) - 1) * take;
+    }
+
     const pagination = {
-      skip: offset,
-      take: perPage,
-      orderBy: { [sortBy || 'name']: sortOrder || 'asc' },
+      skip,
+      take,
+      orderBy: { [sortBy || 'createdAt']: sortOrder || 'desc' },
       include: {
         genres: {
           select: {
@@ -34,30 +43,21 @@ export class TitleService {
       },
     };
 
-    let defaultExcludeGenre;
-
-    defaultExcludeGenre = await this.db.genre.findFirst({
-      where: { name: 'default-exclude' },
-      select: { id: true },
-    });
-
-    if (!defaultExcludeGenre) {
-      defaultExcludeGenre = await this.db.genre.create({
-        data: { name: 'default-exclude' },
-        select: { id: true },
-      });
+    if (!exclude) {
+      defaultExcludeGenre = await this.defaultExcludeValue();
+      exclude = [defaultExcludeGenre.id]; // give to exclude array default value if not exist
     }
 
-    if (!exclude) exclude = [defaultExcludeGenre.id]; // give to exclude array default value if not exist
-
-    if (status) await this.validateStatus(status);
-
-    if (types) await this.validateTypes(types);
+    await this.validateGenresIds(exclude);
 
     if (exclude.length > 1)
       parseExcludeMany = exclude.map((str) => parseInt(str.toString(), 10));
 
     const parseExcludeOne = Number(exclude[0]);
+
+    if (status) await this.validateStatus(status);
+
+    if (types) await this.validateTypes(types);
 
     if (!include) {
       return await this.db.title.findMany({
@@ -85,14 +85,11 @@ export class TitleService {
     }
 
     await this.validateGenresIds(include);
-    await this.validateGenresIds(exclude);
-
-    const parseIncludeOne = Number(include[0]);
-
-    let parseIncludeMany: number[];
 
     if (include.length > 1)
       parseIncludeMany = include.map((str) => parseInt(str.toString(), 10));
+
+    const parseIncludeOne = Number(include[0]);
 
     return await this.db.title.findMany({
       where: {
@@ -178,6 +175,22 @@ export class TitleService {
     await this.db.title.delete({ where: { id } });
 
     return;
+  }
+
+  async defaultExcludeValue(): Promise<{ id: number }> {
+    const defaultExcludeGenre = await this.db.genre.findFirst({
+      where: { name: 'default-exclude' },
+      select: { id: true },
+    });
+
+    if (!defaultExcludeGenre) {
+      return await this.db.genre.create({
+        data: { name: 'default-exclude' },
+        select: { id: true },
+      });
+    }
+
+    return defaultExcludeGenre;
   }
 
   async validateGenresIds(arrayOfIds: number[]) {
