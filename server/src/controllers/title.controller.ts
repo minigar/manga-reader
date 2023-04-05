@@ -11,13 +11,12 @@ import {
 } from '@nestjs/common';
 import { Public } from 'src/common/decorators ';
 import { successResponse } from 'src/helpers/success-response';
-import { TitleBodyModel } from 'src/models/Title.dto';
+import { TitleBodyModel, YearReleaseQuerySort } from 'src/models/Title.dto';
 import { TitleService } from 'src/services/title.service';
 import { PaginationBodyModel } from '../models/Pagination.dto';
 import { TitleSortBodyModel } from 'src/models/SortBodyModel';
 import { GenreQuerySort } from 'src/models/Genre.dto';
 import { TitleStatus, TitleType } from '@prisma/client';
-import { ChapterQuerySort } from 'src/models/Chapter.dto';
 
 @Controller('titles')
 export class TitleController {
@@ -31,7 +30,7 @@ export class TitleController {
     @Query('genres') genres?: GenreQuerySort,
     @Query('types') types?: TitleType[],
     @Query('status') status?: TitleStatus[],
-    @Query('chapters') chapters?: ChapterQuerySort,
+    @Query('yearRelease') yearRelease?: YearReleaseQuerySort,
   ) {
     return successResponse(
       await this.titleServie.getList(
@@ -43,8 +42,8 @@ export class TitleController {
         genres?.exclude,
         types,
         status,
-        // chapters?.chapterMin,
-        // chapters?.chapterMax,
+        yearRelease?.min,
+        yearRelease?.max,
       ),
     );
   }

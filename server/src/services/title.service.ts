@@ -18,12 +18,19 @@ export class TitleService {
     exclude?: number[],
     types?: TitleType[],
     status?: TitleStatus[],
+    yearReleaseMin?: number,
+    yearReleaseMax?: number,
   ) {
     let defaultExcludeGenre: { id: number };
+    let parseYearReleaseMin: number;
+    let parseYearReleaseMax: number;
     let parseExcludeMany: number[];
     let parseIncludeMany: number[];
     let skip: number;
     let take: number;
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
 
     if (page && perPage) {
       take = Number(perPage);
@@ -59,6 +66,10 @@ export class TitleService {
 
     if (types) await this.validateTypes(types);
 
+    if (yearReleaseMin) parseYearReleaseMin = Number(yearReleaseMin);
+
+    if (yearReleaseMax) parseYearReleaseMax = Number(yearReleaseMax);
+
     if (!include) {
       return await this.db.title.findMany({
         where: {
@@ -74,6 +85,10 @@ export class TitleService {
           },
           status: {
             in: status,
+          },
+          yearRelease: {
+            gte: parseYearReleaseMin || 0,
+            lte: parseYearReleaseMax || currentYear,
           },
         },
 
@@ -110,6 +125,10 @@ export class TitleService {
         },
         status: {
           in: status,
+        },
+        yearRelease: {
+          gte: parseYearReleaseMin || 0,
+          lte: parseYearReleaseMax || currentYear,
         },
       },
 
