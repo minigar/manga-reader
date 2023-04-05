@@ -16,7 +16,7 @@ import { TitleService } from 'src/services/title.service';
 import { PaginationBodyModel } from '../models/Pagination.dto';
 import { TitleSortBodyModel } from 'src/models/SortBodyModel';
 import { GenreQuerySort } from 'src/models/Genre.dto';
-import { TitleType } from '@prisma/client';
+import { TitleStatus, TitleType } from '@prisma/client';
 
 @Controller('titles')
 export class TitleController {
@@ -29,6 +29,7 @@ export class TitleController {
     @Query() { sortBy, sortOrder }: TitleSortBodyModel,
     @Query('genres') genres?: GenreQuerySort,
     @Query('types') types?: TitleType[],
+    @Query('status') status?: TitleStatus[],
   ) {
     return successResponse(
       await this.titleServie.getList(
@@ -39,6 +40,7 @@ export class TitleController {
         genres?.include,
         genres?.exclude,
         types,
+        status,
       ),
     );
   }

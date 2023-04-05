@@ -4,7 +4,7 @@ import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
 import { TitleBodyModel } from 'src/models/Title.dto';
 import { GenreErrorKey } from 'src/controllers/errorKeys/GenreErrorKey';
-import { TitleType } from '@prisma/client';
+import { TitleStatus, TitleType } from '@prisma/client';
 
 @Injectable()
 export class TitleService {
@@ -17,7 +17,9 @@ export class TitleService {
     include?: number[],
     exclude?: number[],
     types?: TitleType[],
+    status?: TitleStatus[],
   ) {
+    let parseExcludeMany: number[];
     const offset = (page - 1) * perPage;
     const pagination = {
       skip: offset,
@@ -32,24 +34,30 @@ export class TitleService {
       },
     };
 
-    if (types) {
-      await this.validateTypes(types);
-      console.log('valid');
-    }
+    let defaultExcludeGenre;
 
-    const defaultExcludeGenre = await this.db.genre.findFirst({
+    defaultExcludeGenre = await this.db.genre.findFirst({
       where: { name: 'default-exclude' },
       select: { id: true },
     });
 
-    if (!exclude) exclude = [defaultExcludeGenre.id];
+    if (!defaultExcludeGenre) {
+      defaultExcludeGenre = await this.db.genre.create({
+        data: { name: 'default-exclude' },
+        select: { id: true },
+      });
+    }
 
-    const parseExcludeOne = Number(exclude[0]);
+    if (!exclude) exclude = [defaultExcludeGenre.id]; // give to exclude array default value if not exist
 
-    let parseExcludeMany: number[];
+    if (status) await this.validateStatus(status);
+
+    if (types) await this.validateTypes(types);
 
     if (exclude.length > 1)
       parseExcludeMany = exclude.map((str) => parseInt(str.toString(), 10));
+
+    const parseExcludeOne = Number(exclude[0]);
 
     if (!include) {
       return await this.db.title.findMany({
@@ -63,6 +71,9 @@ export class TitleService {
           },
           type: {
             in: types,
+          },
+          status: {
+            in: status,
           },
         },
 
@@ -99,6 +110,9 @@ export class TitleService {
         },
         type: {
           in: types,
+        },
+        status: {
+          in: status,
         },
       },
 
@@ -191,8 +205,23 @@ export class TitleService {
       const isElmContainsType = this.isType(currentElm);
 
       if (!isElmContainsType)
-        throw new BusinessError('Array of type must be only as titles types!');
+        throw new BusinessError(TitleErrorKey.TYPES_BAD_VALIDATION);
     }
+  }
+
+  async validateStatus(array: string[]) {
+    for (let i = 0; i < array.length; i++) {
+      const currentElm = array[i];
+
+      const isElmContainsType = this.isStatus(currentElm);
+
+      if (!isElmContainsType)
+        throw new BusinessError(TitleErrorKey.STATUS_BAD_VALIDATION);
+    }
+  }
+
+  isStatus(value: string): value is TitleStatus {
+    return Object.values(TitleStatus).includes(value as TitleStatus);
   }
 
   isType(value: string): value is TitleType {
