@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsNumberString,
+} from 'class-validator';
 
 export class ChapterBodyModel {
   @IsNotEmpty()
@@ -12,4 +18,14 @@ export class ChapterBodyModel {
   @IsNotEmpty()
   @IsNumber()
   volume: number;
+}
+
+export class ChapterQuerySort {
+  @IsOptional()
+  @IsNumberString()
+  chapterMin?: number;
+
+  @IsOptional()
+  @IsNumberString()
+  chapterMax?: number;
 }
