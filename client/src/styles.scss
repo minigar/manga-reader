@@ -1,5 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;600&family=Josefin+Sans:wght@400;500;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Chivo Mono', sans-serif;
+}
+
+$basic-white-color: white;
+$hover-menu-color: #E69928;
+$hover-button-color: #E79A2B;
+$basic-green-color: #4CAF50;
+
+@mixin setFontStyles($font-family, $font-weight) {
+  font-family: $font-family;
+  font-weight: $font-weight;
 }
