@@ -1,13 +1,68 @@
+@import "../styles.scss";
+
 .allBlock {
-  background-color: black;
   max-width: 100vw;
   width: 100vw;
   min-height: 100vh;
   height: auto;
 
   .header {
-    width: 100%;
     height: 56px;
+    padding: 0 100px;
     background-color: #e48f13;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 35px;
+
+    .logo {
+      width: 150px;
+      height: 36px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .menu {
+      display: flex;
+      column-gap: 15px;
+      @include setFontStyles('Chivo Mono', 700);
+      color: $basic-white-color;
+
+      div {
+        padding: 9px 18px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $hover-menu-color;
+          transition: 0.3s;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      column-gap: 11px;
+
+      button:nth-child(1) {
+        border: none;
+      }
+
+      button {
+        color: $basic-white-color;
+        background: none;
+        border-radius: 5px;
+        font-weight: 700;
+        border: 1px solid white;
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $hover-button-color;
+        }
+      }
+    }
   }
 }
