@@ -11,6 +11,7 @@ import { ChapterService } from './chapter.service';
 import { PageService } from './page.service';
 import { PageCommentsService } from './page-comments.service';
 import { GenreService } from './genre.service';
+import { SeedService } from './seed.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -25,6 +26,7 @@ import { GenreService } from './genre.service';
     PageService,
     PageCommentsService,
     GenreService,
+    SeedService,
   ],
   exports: [
     UserService,
@@ -37,6 +39,7 @@ import { GenreService } from './genre.service';
     PageService,
     PageCommentsService,
     GenreService,
+    SeedService,
   ],
 })
 export class ServiceModule {}

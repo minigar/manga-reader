@@ -47,6 +47,7 @@ export class TitleService {
             name: true,
           },
         },
+        ratings: true,
       },
     };
 

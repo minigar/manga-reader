@@ -12,6 +12,7 @@ import { ChapterController } from './chapter.controller';
 import { PageController } from './page.controller';
 import { PageCommentsController } from './page-comments.controller';
 import { GenreController } from './genre.controller';
+import { SeedController } from './seed.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -26,6 +27,7 @@ import { GenreController } from './genre.controller';
     PageController,
     PageCommentsController,
     GenreController,
+    SeedController,
   ],
 })
 export class ControllersModule {}
