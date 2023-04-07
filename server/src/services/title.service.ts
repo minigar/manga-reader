@@ -47,7 +47,13 @@ export class TitleService {
             name: true,
           },
         },
-        ratings: true,
+        ratings: {
+          select: {
+            id: true,
+            userId: true,
+            value: true,
+          },
+        },
       },
     };
 

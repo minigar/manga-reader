@@ -12,6 +12,7 @@ import { PageService } from './page.service';
 import { PageCommentsService } from './page-comments.service';
 import { GenreService } from './genre.service';
 import { SeedService } from './seed.service';
+import { RatingService } from './rating.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -27,6 +28,7 @@ import { SeedService } from './seed.service';
     PageCommentsService,
     GenreService,
     SeedService,
+    RatingService,
   ],
   exports: [
     UserService,
@@ -40,6 +42,7 @@ import { SeedService } from './seed.service';
     PageCommentsService,
     GenreService,
     SeedService,
+    RatingService,
   ],
 })
 export class ServiceModule {}
