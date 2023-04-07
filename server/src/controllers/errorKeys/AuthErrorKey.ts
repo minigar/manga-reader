@@ -4,6 +4,8 @@ export const AuthErrorKey = {
   EMAIL_CAN_NOT_BE_EMPTY: 'Email cannot be empy',
   EMAIL_NOT_MACTHES: 'Email not matches!',
   PASSWORD_CAN_NOT_BE_EMPTY: 'Password cannot be empy',
+  PASSWORD_BAD_VALIDATION:
+    'Password must contains at least 4 symbols and latin',
   PASSWORDS_ARE_NOT_SAME: 'Password are not same!',
   HASHED_RT_NON_EXISTENT: 'HashedRt does not exist!',
   TOKENS_ARE_NOT_SAME: 'Tokens are not same!',

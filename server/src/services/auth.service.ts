@@ -8,6 +8,7 @@ import { BusinessError } from '../errors/businessErrors/businessError';
 import { AuthErrorKey, UserErrorKey } from 'src/controllers/errorKeys';
 import { v4 as uuid } from 'uuid';
 import { ListService } from './list.service';
+import { validPassw } from 'src/common/regex/password.regex';
 
 @Injectable()
 export class AuthService {
@@ -23,8 +24,10 @@ export class AuthService {
     password,
     avatarImgUri,
   }: UserBodyModel): Promise<Tokens> {
+    await validPassw(password);
     const password_hash = await this.hashData(password);
     const user = await this.db.user.findFirst({ where: { email } });
+
     if (user) {
       throw new BusinessError(AuthErrorKey.EMAIL_EXISTS);
     }
