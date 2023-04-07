@@ -9,10 +9,10 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { Public } from 'src/common/decorators ';
+import { Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
 import { TitleCommentsService } from 'src/services/title-comments.service';
-import { CurrentUser } from '../common/decorators /CurrentUser.decorator';
+import { CurrentUser } from '../common/decorators/CurrentUser.decorator';
 import { PaginationBodyModel } from 'src/models/Pagination.dto';
 
 @Controller('titles/:titleId/comments')

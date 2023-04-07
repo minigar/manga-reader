@@ -9,7 +9,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { Public } from 'src/common/decorators ';
+import { Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
 import { ChapterService } from 'src/services/chapter.service';
 import { ChapterBodyModel } from '../models/Chapter.dto';

@@ -9,9 +9,9 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { Public } from 'src/common/decorators ';
+import { Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
-import { CurrentUser } from '../common/decorators /CurrentUser.decorator';
+import { CurrentUser } from '../common/decorators/CurrentUser.decorator';
 import { PageCommentsService } from '../services/page-comments.service';
 import { PaginationBodyModel } from '../models/Pagination.dto';
 

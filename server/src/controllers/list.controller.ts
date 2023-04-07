@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { successResponse } from 'src/helpers/success-response';
 import { ListService } from '../services/list.service';
-import { CurrentUser } from 'src/common/decorators ';
+import { CurrentUser } from 'src/common/decorators';
 
 @Controller('lists')
 export class ListController {

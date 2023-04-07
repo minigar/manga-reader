@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { successResponse } from 'src/helpers/success-response';
 import { PageService } from '../services/page.service';
-import { Public } from '../common/decorators /Public.decorator';
+import { Public } from '../common/decorators/Public.decorator';
 import { PageBodyModel, PageUpdateBodyModel } from 'src/models/Page.dto';
 import { PaginationBodyModel } from '../models/Pagination.dto';
 

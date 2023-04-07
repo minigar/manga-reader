@@ -12,7 +12,7 @@ import {
 import { successResponse } from 'src/helpers/success-response';
 import { GenreService } from '../services/genre.service';
 import { GenreBodyModel } from '../models/Genre.dto';
-import { Public } from 'src/common/decorators ';
+import { Public } from 'src/common/decorators';
 
 @Controller('genres')
 export class GenreController {

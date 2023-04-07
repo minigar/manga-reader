@@ -7,7 +7,7 @@ import {
   ParseIntPipe,
   Put,
 } from '@nestjs/common';
-import { CurrentUser, Public } from 'src/common/decorators ';
+import { CurrentUser, Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
 import { UserService } from 'src/services/user.service';
 import { UserBodyModel } from '../models/User.dto';

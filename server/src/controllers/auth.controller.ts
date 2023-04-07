@@ -10,8 +10,8 @@ import { UserBodyModel } from 'src/models/User.dto';
 import { AuthService } from 'src/services/auth.service';
 import { Tokens } from 'src/auth/types';
 import { RefreshTokenGuard } from 'src/common/guards';
-import { CurrentUser } from '../common/decorators /CurrentUser.decorator';
-import { Public } from 'src/common/decorators ';
+import { CurrentUser } from '../common/decorators/CurrentUser.decorator';
+import { Public } from 'src/common/decorators';
 
 @Controller('auth')
 export class AuthController {

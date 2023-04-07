@@ -9,7 +9,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { Public } from 'src/common/decorators ';
+import { Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
 import { TitleBodyModel, YearReleaseQuerySort } from 'src/models/Title.dto';
 import { TitleService } from 'src/services/title.service';
