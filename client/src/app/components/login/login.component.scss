@@ -45,6 +45,11 @@
       }
     }
 
+    .validationError {
+      margin: 8px 0;
+      color: red;
+    }
+
     button {
       margin-top: 15px;
       background-color: $basic-green-color;

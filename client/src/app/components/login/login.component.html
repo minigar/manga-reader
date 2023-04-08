@@ -2,16 +2,28 @@
   <div class="header">
     Увійдіть в систему
   </div>
-  <form>
+
+  <form [formGroup]="form">
 
     <label for="email"> Пошта </label>
-    <input id="email" name="name" type="email" />
-    <div class="error">  </div>
+    <input id="email" type="email" formControlName="email"/>
+    <div *ngIf="getEmail().invalid && (getEmail().dirty || getEmail().touched || isFormSubmitted)" class="validationError">
+      <div *ngIf="getEmail().errors?.['required']">
+        Поле необхідно заповнити
+      </div>
+      <div *ngIf="!getEmail().errors?.['required'] && getEmail().errors?.['email'] && getEmail().dirty">
+        Неправильний формат
+      </div>
+    </div>
 
     <label for="password"> Пароль </label>
-    <input id="password" name="name" type="password" />
-    <div class="error">  </div>
+    <input id="password" type="password" formControlName="password"/>
+    <div *ngIf="getPassword()?.invalid && (getPassword()?.dirty || getPassword()?.touched || isFormSubmitted)" class="validationError">
+      <div *ngIf="getPassword()?.errors?.['required']">
+        Поле необхідно заповнити
+      </div>
+    </div>
 
-    <button> Ввійти </button>
+    <button (click)="login()"> Ввійти </button>
   </form>
 </div>

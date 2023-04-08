@@ -5,7 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginRoutingModule } from './components/login/login-routing.module';
+import { LoginModule } from './components/login/login.module';
 import { SignupRoutingModule } from './components/signup/signup-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SignupModule } from './components/signup/signup.module';
 
 @NgModule({
   declarations: [
@@ -15,8 +18,11 @@ import { SignupRoutingModule } from './components/signup/signup-routing.module';
     BrowserModule,
     AppRoutingModule,
     LoginRoutingModule,
+    LoginModule,
     SignupRoutingModule,
-    HttpClientModule
+    SignupModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
