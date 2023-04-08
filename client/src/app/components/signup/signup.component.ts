@@ -49,8 +49,6 @@ export class SignupComponent implements OnInit {
   }
 
   public signup(): void {
-    console.log(this.form.controls);
-    console.log(this.form.status);
     this.isFormSubmitted = true;
     if (this.form.invalid) {
       this.form.markAsUntouched();
