@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { TitleErrorKey } from 'src/controllers/errorKeys';
-import { GeneralErrorKey } from 'src/controllers/errorKeys/GeneralErrorKey';
-import { RatingErrorKey } from 'src/controllers/errorKeys/RatingErrorKey';
+import {
+  GeneralErrorKey,
+  RatingErrorKey,
+  TitleErrorKey,
+} from 'src/controllers/errorKeys';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 
@@ -12,6 +14,12 @@ export class RatingService {
     const title = await this.db.title.findFirst({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
+    if (value > 10 || value < 0)
+      throw new BusinessError(RatingErrorKey.VALUE_BAD_REQUEST);
+
+    if (typeof value !== 'number')
+      throw new BusinessError(RatingErrorKey.RATE_MUST_BE_NUMBER);
 
     const upsertRating = await this.db.rating.upsert({
       where: { titleId_userId: { titleId, userId } },

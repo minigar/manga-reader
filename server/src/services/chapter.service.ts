@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
-import { ChapterErrorKey } from 'src/controllers/errorKeys/ChapterErrorKey';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
 import { Prisma } from '@prisma/client';
+import { validName } from 'src/common/regex/chapter.regex';
+import { ChapterErrorKey } from 'src/controllers/errorKeys';
 
 @Injectable()
 export class ChapterService {
@@ -31,6 +32,8 @@ export class ChapterService {
   }
 
   async create(titleId: number, name: string, number: number, volume: number) {
+    await validName(name);
+
     const title = await this.db.title.findFirst({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
@@ -48,6 +51,8 @@ export class ChapterService {
   }
 
   async updateById(titleId: number, id: number, name: string) {
+    await validName(name);
+
     const title = await this.db.title.findFirst({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);

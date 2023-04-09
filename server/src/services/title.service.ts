@@ -5,6 +5,7 @@ import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
 import { TitleBodyModel } from 'src/models/Title.dto';
 import { GenreErrorKey } from 'src/controllers/errorKeys/GenreErrorKey';
 import { TitleStatus, TitleType } from '@prisma/client';
+import { validName } from 'src/common/regex/title.regex';
 
 @Injectable()
 export class TitleService {
@@ -161,6 +162,8 @@ export class TitleService {
     type,
     status,
   }: TitleBodyModel) {
+    await validName(name);
+
     const title = await this.db.title.findFirst({ where: { name } });
 
     if (title) throw new BusinessError(TitleErrorKey.NAME_AREADY_EXIST);
@@ -176,6 +179,8 @@ export class TitleService {
     id: number,
     { name, description, yearRelease, type, status }: TitleBodyModel,
   ) {
+    await validName(name);
+
     const title = await this.db.title.findFirst({ where: { id } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);

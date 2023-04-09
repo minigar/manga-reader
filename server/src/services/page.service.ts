@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
-import { ChapterErrorKey } from '../controllers/errorKeys/ChapterErrorKey';
-import { PageErrorKey } from '../controllers/errorKeys/PageErrorKey';
-import { GeneralErrorKey } from '../controllers/errorKeys/GeneralErrorKey';
+import {
+  ChapterErrorKey,
+  GeneralErrorKey,
+  PageErrorKey,
+} from 'src/controllers/errorKeys';
 
 @Injectable()
 export class PageService {

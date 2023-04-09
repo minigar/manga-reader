@@ -14,7 +14,6 @@ model User {
   email        String  @unique
   password     String
   hashedRT     String?
-  avatarImgUri String  @default("")
 
   lists         List[]
   titleComments TitleComment[]
@@ -138,8 +137,8 @@ model TitleComment {
 }
 
 model Rating {
-  id    Int @id @default(autoincrement())
-  value Int @default(0)
+  id    Int   @id @default(autoincrement())
+  value Float @default(0)
 
   title   Title @relation(fields: [titleId], references: [id])
   titleId Int

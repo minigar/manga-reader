@@ -8,7 +8,7 @@ import { BusinessError } from '../errors/businessErrors/businessError';
 import { AuthErrorKey, UserErrorKey } from 'src/controllers/errorKeys';
 import { v4 as uuid } from 'uuid';
 import { ListService } from './list.service';
-import { validPassw } from 'src/common/regex/password.regex';
+import { validName, validPassw } from 'src/common/regex/user.regex';
 
 @Injectable()
 export class AuthService {
@@ -18,13 +18,10 @@ export class AuthService {
     private readonly listService: ListService,
   ) {}
 
-  async singUp({
-    name,
-    email,
-    password,
-    avatarImgUri,
-  }: UserBodyModel): Promise<Tokens> {
+  async singUp({ name, email, password }: UserBodyModel): Promise<Tokens> {
+    await validName(name);
     await validPassw(password);
+
     const password_hash = await this.hashData(password);
     const user = await this.db.user.findFirst({ where: { email } });
 
@@ -36,7 +33,6 @@ export class AuthService {
         name,
         email,
         password: password_hash,
-        avatarImgUri,
       },
     });
 
@@ -54,6 +50,8 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<Tokens> {
+    await validPassw(password);
+
     if (!email) {
       throw new BusinessError(AuthErrorKey.EMAIL_CAN_NOT_BE_EMPTY);
     }

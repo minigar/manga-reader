@@ -34,8 +34,6 @@ export class SeedService {
         name: 'user1',
         email: 'user1@gmail.com',
         password: '123',
-        avatarImgUri:
-          'https://cover.imglib.info/uploads/users/2058512/A3YR4UsAurfH.jpg',
         isAdmin: true,
       },
     });
@@ -47,8 +45,6 @@ export class SeedService {
         name: 'user2',
         email: 'user2@gmail.com',
         password: '123',
-        avatarImgUri:
-          'https://cover.imglib.info/uploads/users/2058512/A3YR4UsAurfH.jpg',
         isAdmin: true,
       },
     });

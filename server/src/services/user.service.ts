@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
-import { AuthErrorKey, UserErrorKey } from 'src/controllers/errorKeys';
+import {
+  AuthErrorKey,
+  GeneralErrorKey,
+  UserErrorKey,
+} from 'src/controllers/errorKeys';
 import { UserUpdate } from '../models/User.dto';
 import * as bcrypt from 'bcrypt';
-import { GeneralErrorKey } from 'src/controllers/errorKeys/GeneralErrorKey';
+import { validName, validPassw } from 'src/common/regex/user.regex';
 
 @Injectable()
 export class UserService {
@@ -31,6 +35,9 @@ export class UserService {
   }
 
   async updateById(id: number, payload: UserUpdate, userId: number) {
+    await validName(payload.name);
+    await validPassw(payload.password);
+
     const user = await this.db.user.findFirst({ where: { id } });
 
     if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
@@ -44,15 +51,18 @@ export class UserService {
 
     if (!isIdMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
-    if (payload.email !== user.email)
-      throw new BusinessError(AuthErrorKey.EMAIL_NOT_MACTHES);
+    const email = await this.db.user.findFirst({
+      where: { email: payload.email },
+    });
+
+    if (email && payload.email !== user.email)
+      throw new BusinessError(AuthErrorKey.EMAIL_EXISTS);
 
     return await this.db.user.update({
       where: { id },
       data: {
         name: payload.name,
         email: payload.email,
-        avatarImgUri: payload.avatarImgUri,
       },
     });
   }
