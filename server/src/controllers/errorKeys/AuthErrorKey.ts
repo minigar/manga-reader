@@ -11,4 +11,6 @@ export const AuthErrorKey = {
   TOKENS_ARE_NOT_SAME: 'Tokens are not same!',
   EXPIRED_TOKEN: 'Token exired!',
   TOKEN_INVALID_SIGNATURE: 'Token have invalid signature!',
+  USERNAME_BAD_VALIDATION:
+    'Username must have latin a-Z number and `_` and no spaces',
 };

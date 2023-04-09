@@ -3,8 +3,7 @@ import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { UserErrorKey } from '../controllers/errorKeys/UserErrorKey';
 import { ListErrorKey } from '../controllers/errorKeys/ListErrorKey';
-import { TitleErrorKey } from 'src/controllers/errorKeys';
-import { GeneralErrorKey } from '../controllers/errorKeys/GeneralErrorKey';
+import { GeneralErrorKey, TitleErrorKey } from 'src/controllers/errorKeys';
 
 const ListIncludes = {
   titles: {

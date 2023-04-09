@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
-import { CommentsErrorKey } from 'src/controllers/errorKeys/CommentsErrorKey';
-import { GeneralErrorKey } from 'src/controllers/errorKeys/GeneralErrorKey';
-import { ChapterErrorKey } from '../controllers/errorKeys/ChapterErrorKey';
-import { PageErrorKey } from '../controllers/errorKeys/PageErrorKey';
 import { UserErrorKey } from '../controllers/errorKeys/UserErrorKey';
+import {
+  ChapterErrorKey,
+  CommentsErrorKey,
+  GeneralErrorKey,
+  PageErrorKey,
+} from 'src/controllers/errorKeys';
 
 @Injectable()
 export class PageCommentsService {

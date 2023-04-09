@@ -3,6 +3,7 @@ import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { TitleErrorKey } from 'src/controllers/errorKeys';
 import { GenreErrorKey } from '../controllers/errorKeys/GenreErrorKey';
+import { validName } from 'src/common/regex/genre.regex';
 
 @Injectable()
 export class GenreService {
@@ -32,6 +33,8 @@ export class GenreService {
   }
 
   async create(name: string, description: string) {
+    await validName(name);
+
     const genre = await this.db.genre.findFirst({
       where: {
         name,
@@ -51,6 +54,8 @@ export class GenreService {
   }
 
   async updateById(id: number, name: string, description: string) {
+    await validName(name);
+
     const genre = await this.db.genre.findFirst({ where: { id } });
 
     if (!genre) throw new BusinessError(GenreErrorKey.GENRE_NOT_EXSITS);
