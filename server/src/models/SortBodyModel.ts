@@ -24,12 +24,13 @@ export class ValidTitleSortOrder implements ValidatorConstraintInterface {
       sortBy === 'name' ||
       sortBy === 'type' ||
       sortBy === 'yearRelease' ||
-      sortBy === 'status'
+      sortBy === 'status' ||
+      sortBy === 'rating'
     );
   }
 
   defaultMessage() {
-    return 'Sort by must be either "name" or  "type" or "yearRelease"or "status"';
+    return 'Sort by must be either "name" or  "type" or "yearRelease"or "status" or "rating"';
   }
 }
 
