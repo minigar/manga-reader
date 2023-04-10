@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;600&family=Josefin+Sans:wght@400;500;700&display=swap');
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
 * {
   margin: 0;
@@ -11,6 +14,10 @@ $basic-white-color: white;
 $hover-menu-color: #E69928;
 $hover-button-color: #E79A2B;
 $basic-green-color: #4CAF50;
+
+#toast-container > div {
+  opacity: 1;
+}
 
 @mixin setFontStyles($font-family, $font-weight) {
   font-family: $font-family;

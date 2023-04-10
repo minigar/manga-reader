@@ -10,9 +10,13 @@
       <div> Інформація </div>
     </nav>
     <div class="buttons">
-      <button (click)="goToLogin()"> Увійти </button>
-      <button (click)="goToSignup()"> Зареєструватися </button>
+      <button (click)="goToLogin()" *ngIf="!isAuthenticated"> Увійти </button>
+      <button (click)="goToSignup()" *ngIf="!isAuthenticated"> Зареєструватися </button>
+      <button (click)="logout()" *ngIf="isAuthenticated"> Вийти </button>
     </div>
   </header>
-  <router-outlet></router-outlet>
+  <div class="content">
+    <router-outlet></router-outlet>
+    <p-toast position="bottom-right"></p-toast>
+  </div>
 </div>
