@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
-import { TitleBodyModel } from 'src/models/Title.dto';
+import { TitleBodyModel, TitleUpdateBodyModel } from 'src/models/Title.dto';
 import { GenreErrorKey } from 'src/controllers/errorKeys/GenreErrorKey';
 import { TitleStatus, TitleType } from '@prisma/client';
 import { validName } from 'src/common/regex/title.regex';
@@ -161,6 +161,7 @@ export class TitleService {
     yearRelease,
     type,
     status,
+    authorId,
   }: TitleBodyModel) {
     await validName(name);
 
@@ -169,7 +170,7 @@ export class TitleService {
     if (title) throw new BusinessError(TitleErrorKey.NAME_AREADY_EXIST);
 
     const newTitle = await this.db.title.create({
-      data: { name, description, yearRelease, type, status },
+      data: { name, description, yearRelease, type, status, authorId },
     });
 
     return newTitle;
@@ -177,7 +178,7 @@ export class TitleService {
 
   async updateById(
     id: number,
-    { name, description, yearRelease, type, status }: TitleBodyModel,
+    { name, description, yearRelease, type, status }: TitleUpdateBodyModel,
   ) {
     await validName(name);
 

@@ -11,7 +11,11 @@ import {
 } from '@nestjs/common';
 import { Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
-import { TitleBodyModel, YearReleaseQuerySort } from 'src/models/Title.dto';
+import {
+  TitleBodyModel,
+  TitleUpdateBodyModel,
+  YearReleaseQuerySort,
+} from 'src/models/Title.dto';
 import { TitleService } from 'src/services/title.service';
 import { PaginationBodyModel } from '../models/Pagination.dto';
 import { TitleSortBodyModel } from 'src/models/SortBodyModel';
@@ -56,7 +60,8 @@ export class TitleController {
 
   @Post()
   async create(
-    @Body() { name, description, yearRelease, type, status }: TitleBodyModel,
+    @Body()
+    { name, description, yearRelease, type, status, authorId }: TitleBodyModel,
   ) {
     return successResponse(
       await this.titleServie.create({
@@ -65,6 +70,7 @@ export class TitleController {
         yearRelease,
         type,
         status,
+        authorId,
       }),
     );
   }
@@ -72,7 +78,8 @@ export class TitleController {
   @Put(':id')
   async updateById(
     @Param('id', ParseIntPipe) id: number,
-    @Body() { name, description, yearRelease, type, status }: TitleBodyModel,
+    @Body()
+    { name, description, yearRelease, type, status }: TitleUpdateBodyModel,
   ) {
     return successResponse(
       await this.titleServie.updateById(id, {

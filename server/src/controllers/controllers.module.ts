@@ -14,6 +14,7 @@ import { PageCommentsController } from './page-comments.controller';
 import { GenreController } from './genre.controller';
 import { SeedController } from './seed.controller';
 import { RatingController } from './rating.controller';
+import { AuthorController } from './author.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -30,6 +31,7 @@ import { RatingController } from './rating.controller';
     GenreController,
     SeedController,
     RatingController,
+    AuthorController,
   ],
 })
 export class ControllersModule {}

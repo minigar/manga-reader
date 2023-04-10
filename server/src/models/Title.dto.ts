@@ -20,8 +20,34 @@ export class TitleBodyModel {
   @IsNumber()
   yearRelease?: number;
 
+  @IsNotEmpty()
+  type: TitleType;
+
+  @IsNotEmpty()
+  status: TitleStatus;
+
+  @IsNotEmpty()
+  @IsNumber()
+  authorId: number;
+}
+
+export class TitleUpdateBodyModel {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsNumber()
+  yearRelease?: number;
+
+  @IsOptional()
   type?: TitleType;
 
+  @IsOptional()
   status?: TitleStatus;
 }
 
