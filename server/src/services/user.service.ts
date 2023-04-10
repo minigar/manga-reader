@@ -63,6 +63,7 @@ export class UserService {
       data: {
         name: payload.name,
         email: payload.email,
+        imgUrl: payload.imgUrl,
       },
     });
   }

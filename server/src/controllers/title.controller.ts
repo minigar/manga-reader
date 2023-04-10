@@ -61,7 +61,15 @@ export class TitleController {
   @Post()
   async create(
     @Body()
-    { name, description, yearRelease, type, status, authorId }: TitleBodyModel,
+    {
+      name,
+      description,
+      yearRelease,
+      type,
+      status,
+      authorId,
+      imgUrl,
+    }: TitleBodyModel,
   ) {
     return successResponse(
       await this.titleServie.create({
@@ -71,6 +79,7 @@ export class TitleController {
         type,
         status,
         authorId,
+        imgUrl,
       }),
     );
   }
@@ -79,7 +88,14 @@ export class TitleController {
   async updateById(
     @Param('id', ParseIntPipe) id: number,
     @Body()
-    { name, description, yearRelease, type, status }: TitleUpdateBodyModel,
+    {
+      name,
+      description,
+      yearRelease,
+      type,
+      status,
+      imgUrl,
+    }: TitleUpdateBodyModel,
   ) {
     return successResponse(
       await this.titleServie.updateById(id, {
@@ -88,6 +104,7 @@ export class TitleController {
         yearRelease,
         type,
         status,
+        imgUrl,
       }),
     );
   }

@@ -162,6 +162,7 @@ export class TitleService {
     type,
     status,
     authorId,
+    imgUrl,
   }: TitleBodyModel) {
     await validName(name);
 
@@ -170,7 +171,7 @@ export class TitleService {
     if (title) throw new BusinessError(TitleErrorKey.NAME_AREADY_EXIST);
 
     const newTitle = await this.db.title.create({
-      data: { name, description, yearRelease, type, status, authorId },
+      data: { name, description, yearRelease, type, status, authorId, imgUrl },
     });
 
     return newTitle;
@@ -178,7 +179,14 @@ export class TitleService {
 
   async updateById(
     id: number,
-    { name, description, yearRelease, type, status }: TitleUpdateBodyModel,
+    {
+      name,
+      description,
+      yearRelease,
+      type,
+      status,
+      imgUrl,
+    }: TitleUpdateBodyModel,
   ) {
     await validName(name);
 
@@ -194,6 +202,7 @@ export class TitleService {
         yearRelease,
         type,
         status,
+        imgUrl,
       },
     });
     return updateTitle;

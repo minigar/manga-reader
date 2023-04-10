@@ -10,7 +10,7 @@ import {
 import { CurrentUser, Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
 import { UserService } from 'src/services/user.service';
-import { UserBodyModel } from '../models/User.dto';
+import { UserUpdate } from '../models/User.dto';
 
 @Controller('users')
 export class UserController {
@@ -31,7 +31,7 @@ export class UserController {
   @Put(':id')
   async updateById(
     @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UserBodyModel,
+    @Body() payload: UserUpdate,
     @CurrentUser() { userId },
   ) {
     return successResponse(
