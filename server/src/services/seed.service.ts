@@ -28,12 +28,13 @@ export class SeedService {
     await this.db.pageComment.deleteMany();
     await this.db.page.deleteMany();
     await this.db.chapter.deleteMany();
+    await this.db.rating.deleteMany();
 
     const user1 = await this.db.user.create({
       data: {
         name: 'user1',
         email: 'user1@gmail.com',
-        password: '123',
+        password: '1234',
         isAdmin: true,
       },
     });
@@ -44,7 +45,7 @@ export class SeedService {
       data: {
         name: 'user2',
         email: 'user2@gmail.com',
-        password: '123',
+        password: '1234',
         isAdmin: true,
       },
     });
@@ -319,6 +320,14 @@ export class SeedService {
       'message from user 2 to user 1 on page1 second',
       comment1ForPage1.id,
     );
+
+    await this.db.rating.create({
+      data: { userId: user1.id, titleId: title1.id, value: 8 },
+    });
+
+    await this.db.rating.create({
+      data: { userId: user2.id, titleId: title1.id, value: 5 },
+    });
   }
 
   async createRequiredUserLists(userId: number) {

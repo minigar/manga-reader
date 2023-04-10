@@ -10,19 +10,29 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
 
-  name         String
-  email        String  @unique
-  password     String
-  hashedRT     String?
+  name     String
+  email    String  @unique
+  password String
+  hashedRT String?
 
   lists         List[]
   titleComments TitleComment[]
   pageComments  PageComment[]
   rating        Rating[]
 
-  role     Role    @default(USER)
-  isAdmin  Boolean @default(false)
-  isAuthor Boolean @default(false)
+  role    Role    @default(USER)
+  isAdmin Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Author {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+
+  titles Title[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,7 +70,9 @@ model Title {
   status      TitleStatus @default(ANNOUNCEMENT)
   yearRelease Int         @default(1990)
   rating      Float       @default(0)
+  authorId    Int?
 
+  Author   Author?        @relation(fields: [authorId], references: [id])
   genres   Genre[]
   chapters Chapter[]
   comments TitleComment[]

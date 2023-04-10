@@ -7,3 +7,4 @@ export * from './GeneralErrorKey';
 export * from './PageErrorKey';
 export * from './CommentsErrorKey';
 export * from './RatingErrorKey';
+export * from './AuthorErrorKey';
