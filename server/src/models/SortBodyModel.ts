@@ -49,5 +49,5 @@ export class TitleSortBodyModel {
   @IsOptional()
   @IsString()
   @Validate(ValidTitleSortOrder)
-  sortBy?: 'name' | 'type' | 'yearRelease' | 'status';
+  sortBy?: 'name' | 'type' | 'yearRelease' | 'status ' | 'rating';
 }
