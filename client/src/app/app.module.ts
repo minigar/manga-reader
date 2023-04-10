@@ -11,8 +11,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SignupModule } from './components/signup/signup.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
-import { MoviesListModule } from './components/movies-list/movies-list.module';
-import { MoviesListRoutingModule } from './components/movies-list/movies-list-routing.module';
+import { ComicsListModule } from './components/comics-list/comics-list.module';
+import { ComicsListRoutingModule } from './components/comics-list/comics-list-routing.module';
 import { MessageService } from 'primeng/api';
 
 @NgModule({
@@ -26,8 +26,8 @@ import { MessageService } from 'primeng/api';
     LoginModule,
     SignupRoutingModule,
     SignupModule,
-    MoviesListRoutingModule,
-    MoviesListModule,
+    ComicsListRoutingModule,
+    ComicsListModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,

@@ -7,7 +7,7 @@ import { TitlesResponse } from '../models/title.response';
 @Injectable({
   providedIn: 'root'
 })
-export class MoviesService {
+export class ComicsService {
 
   constructor(private httpClient: HttpClient) { }
 
