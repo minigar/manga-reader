@@ -4,6 +4,7 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
+  IsUrl,
 } from 'class-validator';
 import { TitleType } from 'src/common/enums/title.enum';
 import { TitleStatus } from '../common/enums/title.enum';
@@ -29,6 +30,10 @@ export class TitleBodyModel {
   @IsNotEmpty()
   @IsNumber()
   authorId: number;
+
+  @IsOptional()
+  @IsUrl()
+  imgUrl?: string;
 }
 
 export class TitleUpdateBodyModel {
@@ -49,6 +54,10 @@ export class TitleUpdateBodyModel {
 
   @IsOptional()
   status?: TitleStatus;
+
+  @IsOptional()
+  @IsUrl()
+  imgUrl?: string;
 }
 
 export class YearReleaseQuerySort {

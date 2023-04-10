@@ -29,6 +29,13 @@ export class SeedService {
     await this.db.page.deleteMany();
     await this.db.chapter.deleteMany();
     await this.db.rating.deleteMany();
+    await this.db.author.deleteMany();
+
+    const Oda = await this.db.author.create({
+      data: {
+        name: 'Oda',
+      },
+    });
 
     const user1 = await this.db.user.create({
       data: {
@@ -55,73 +62,92 @@ export class SeedService {
     // ____________________________
 
     const genre1 = await this.db.genre.create({
-      data: { name: 'genre1', description: 'genre1 description ...' },
+      data: { name: 'comedy', description: 'comedy description ...' },
     });
 
     const genre2 = await this.db.genre.create({
-      data: { name: 'genre2', description: 'genre2 description ...' },
+      data: { name: 'drama', description: 'drama description ...' },
     });
 
     const genre3 = await this.db.genre.create({
-      data: { name: 'genre3', description: 'genre3 description ...' },
+      data: { name: 'horror', description: 'horror description ...' },
     });
 
     const genre4 = await this.db.genre.create({
-      data: { name: 'genre4', description: 'genre4 description ...' },
+      data: { name: 'sport', description: 'sport description ...' },
     });
 
     const genre5 = await this.db.genre.create({
-      data: { name: 'genre5', description: 'genre5 description ...' },
+      data: { name: 'romantic', description: 'romantic description ...' },
     });
 
     const genre6 = await this.db.genre.create({
-      data: { name: 'genre6', description: 'genre6 description ...' },
+      data: { name: 'psyho', description: 'psyho description ...' },
     });
 
     // ______________________________
 
     const title1 = await this.db.title.create({
       data: {
-        name: 'title1',
-        description: 'title1 description',
+        name: 'BTOOM',
+        description:
+          'В 22 года Рёта Сакамото ненавидит реальный мир. Что в нем есть хорошего? Друзей нету, Мать, которая постоянно компостирует мозги и заставляет искать работу. Нет ничего, что бы могло удержать его от онлайн-игры, в которой Сакамото лидер в общем рейтинге. Но что будет, если виртуальный мир вдруг поменяется местами с реальностью? Что, если однажды утром ты проснешься не в собственной кровати, а на острове, где есть только одно правило - убей или будь убитым? Сможет ли наш герой выжить и выяснить, кто стоит за этой жестокой игрой?',
         type: 'MANGA',
         status: 'ONGOING',
+        authorId: Oda.id,
+        imgUrl:
+          'https://cover.imglib.info/uploads/cover/btoom/cover/oIICYMFMS4SH_250x350.jpg',
       },
     });
 
     const title2 = await this.db.title.create({
       data: {
-        name: 'title2',
-        description: 'title2 description',
+        name: 'Berserk',
+        description:
+          'Гатс, известный как Чёрный Мечник, ищет убежища от демонов, охотящихся за ним, и отмщения человеку, сделавшему из него жертву на своём алтаре. С помощью только своей титанической силы, умения и меча, Гатс должен биться против жестокого рока, пока битва с ненавистью мало-помалу лишает его человечности. Берсерк — это тёмная и погружающая в раздумья история о неистовых сражениях и безжалостном роке.',
         type: 'MANHWA',
         status: 'ANNOUNCEMENT',
+        authorId: Oda.id,
+        imgUrl:
+          'https://cover.imglib.info/uploads/cover/berserk/cover/QPXzTLH6zrIw_250x350.jpg',
       },
     });
 
     const title3 = await this.db.title.create({
       data: {
-        name: 'title3',
-        description: 'title3 description',
+        name: 'Claymore',
+        description:
+          'В мире, где монстры по имени Йома охотятся на людей и живут среди них, маскируясь, единственная надежда человечества — новая порода воинов, известных как Клейморы. Наполовину люди, наполовину монстры, эти сереброглазые истребители обладают сверхъестественной силой, но обречены бороться со своими дикими порывами или полностью потерять человечность.        ',
         type: 'MANGA',
         status: 'FINISHED',
+        authorId: Oda.id,
+        imgUrl:
+          'https://cover.imglib.info/uploads/cover/claymore/cover/IvGp6xsjocAM_250x350.jpg',
       },
     });
 
     const title4 = await this.db.title.create({
       data: {
-        name: 'title4',
-        description: 'title4 description',
+        name: 'Dwaejiuri',
+        description:
+          'Расслабляющий отдых в раю или смертельная ловушка? Главный герой просыпается на захватывающем дух пляже, но понятия не имеет, кто он и как сюда попал. Как бы он ни пытался собрать всё воедино, распутать эту головокружительную тайну будет нелегко, когда каждая подсказка ведёт к ещё более безумным вопросам... и семья, которая приветствует его в своем доме, не такая, какой кажется.        ',
         type: 'COMICS',
         status: 'SUSPENDED',
+        authorId: Oda.id,
+        imgUrl:
+          'https://cover.imglib.info/uploads/cover/dwaejiuri-/cover/HoQzzL1Ov53y_250x350.jpg',
       },
     });
 
     const title5 = await this.db.title.create({
       data: {
-        name: 'title5',
-        description: 'title5 description',
+        name: 'Kanojo no Tokutouseki',
+        description: 'Манга о юноше, и его особенной посетительнице.',
         type: 'MAMHUA',
         status: 'FINISHED',
+        authorId: Oda.id,
+        imgUrl:
+          'https://cover.imglib.info/uploads/cover/kanojo-no-tokutousek-sh1r0/cover/ymhV8i3Tglsd_250x350.jpg',
       },
     });
     // _______________________
@@ -143,28 +169,28 @@ export class SeedService {
 
     // _________________________
 
-    const comment1ForTitle1 = await this.titleCommentsService.create(
-      title1.id,
+    const comment1ForTitle5 = await this.titleCommentsService.create(
+      title5.id,
       null,
       user1.id,
-      'message from user 1 to title1',
+      'message from user 1 to title5',
     );
 
-    const comment2ForTitle1 = await this.titleCommentsService.create(
-      title1.id,
-      comment1ForTitle1.id,
+    const comment2ForTitle5 = await this.titleCommentsService.create(
+      title5.id,
+      comment1ForTitle5.id,
       user2.id,
-      'message from user 2 to title1 to user 1',
+      'message from user 2 to title5 to user 1',
     );
 
-    const comment3ForTitle1 = await this.titleCommentsService.create(
-      title1.id,
-      comment2ForTitle1.id,
+    const comment3ForTitle5 = await this.titleCommentsService.create(
+      title5.id,
+      comment2ForTitle5.id,
       user1.id,
       'nested message to user 1',
     );
 
-    const comment4ForTitle1 = await this.titleCommentsService.create(
+    const comment4ForTitle5 = await this.titleCommentsService.create(
       title2.id,
       null,
       user1.id,
@@ -178,98 +204,77 @@ export class SeedService {
       'message from user 2 to title2',
     );
 
-    const comment6ForTitle1 = await this.titleCommentsService.create(
-      title1.id,
-      comment2ForTitle1.id,
+    const comment6ForTitle5 = await this.titleCommentsService.create(
+      title5.id,
+      comment2ForTitle5.id,
       user1.id,
       'message from user 1 to title2 to user2',
     );
 
     // _________________________________
 
-    const chapter1ForTitle1 = await this.chapterService.create(
-      title1.id,
-      'chapter1Fortitle1',
+    const chapter1ForTitle5 = await this.chapterService.create(
+      title5.id,
+      'chapter1Fortitle5',
       1,
       1,
-    );
-
-    const chapter2ForTitle1 = await this.chapterService.create(
-      title1.id,
-      'chapter2Fortitle1',
-      2,
-      1,
-    );
-
-    const chapter3ForTitle1 = await this.chapterService.create(
-      title1.id,
-      'chapte31Fortitle1',
-      3,
-      1,
-    );
-
-    const chapter4ForTitle1 = await this.chapterService.create(
-      title1.id,
-      'chapter4Fortitle1',
-      4,
-      1,
-    );
-
-    const chapter5ForTitle1 = await this.chapterService.create(
-      title1.id,
-      'chapter5Fortitle1',
-      5,
-      2,
-    );
-
-    const chapter6ForTitle1 = await this.chapterService.create(
-      title1.id,
-      'chapter6Fortitle1',
-      6,
-      2,
     );
 
     // ______________________________________
 
     const page1ForChaper1 = await this.pageService.create(
-      title1.id,
-      chapter1ForTitle1.id,
-      'https://img33.imgslib.link//manga/3-second-strip/chapters/2390891/1_BKNW.png',
+      title5.id,
+      chapter1ForTitle5.id,
+      'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn001.png.jpg',
       1,
     );
 
     const page2ForChaper1 = await this.pageService.create(
-      title1.id,
-      chapter1ForTitle1.id,
-      'https://img33.imgslib.link//manga/3-second-strip/chapters/2390891/3-o-1_CMr0.png',
+      title5.id,
+      chapter1ForTitle5.id,
+      'https://img2.mixlib.me//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn002.png.jpg',
       2,
     );
 
     const page3ForChaper1 = await this.pageService.create(
-      title1.id,
-      chapter1ForTitle1.id,
-      'https://img2.mixlib.me//manga/3-second-strip/chapters/2390289/3-o_ixis.png',
+      title5.id,
+      chapter1ForTitle5.id,
+      'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn003.png.jpg',
       3,
     );
 
     const page4orChaper1 = await this.pageService.create(
-      title1.id,
-      chapter1ForTitle1.id,
-      'https://img33.imgslib.link//manga/3-second-strip/chapters/2390289/2-o_huU9.png',
+      title5.id,
+      chapter1ForTitle5.id,
+      'https://img2.mixlib.me//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn004.png.jpg',
       4,
     );
 
     const page5ForChaper1 = await this.pageService.create(
-      title1.id,
-      chapter1ForTitle1.id,
-      'https://img33.imgslib.link//manga/3-second-strip/chapters/2390891/2-o-1_F8mB.png',
+      title5.id,
+      chapter1ForTitle5.id,
+      'https://img2.mixlib.me//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn005.png.jpg',
       5,
+    );
+
+    const page6ForChaper1 = await this.pageService.create(
+      title5.id,
+      chapter1ForTitle5.id,
+      'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn006.png.jpg',
+      6,
+    );
+
+    const page7ForChaper1 = await this.pageService.create(
+      title5.id,
+      chapter1ForTitle5.id,
+      'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn010.png.jpg',
+      7,
     );
     //___________________________________________________________________________________
 
     const comment1ForPage1 = await this.pageCommentsService.create(
-      title1.id,
-      chapter1ForTitle1.id,
+      title5.id,
+      chapter1ForTitle5.id,
       page1ForChaper1.id,
       user1.id,
       'message from user 1 to page1',
@@ -277,8 +282,8 @@ export class SeedService {
     );
 
     const comment2ForPage1 = await this.pageCommentsService.create(
-      title1.id,
-      chapter1ForTitle1.id,
+      title5.id,
+      chapter1ForTitle5.id,
       page1ForChaper1.id,
       user2.id,
       'message from user 2 to user 1 on page1',
@@ -286,8 +291,8 @@ export class SeedService {
     );
 
     const comment3ForPage1 = await this.pageCommentsService.create(
-      title1.id,
-      chapter1ForTitle1.id,
+      title5.id,
+      chapter1ForTitle5.id,
       page1ForChaper1.id,
       user2.id,
       'message from user 2 to user 2 on page1',
@@ -295,8 +300,8 @@ export class SeedService {
     );
 
     const comment4ForPage1 = await this.pageCommentsService.create(
-      title1.id,
-      chapter1ForTitle1.id,
+      title5.id,
+      chapter1ForTitle5.id,
       page1ForChaper1.id,
       user2.id,
       'message from user 2 to page1',
@@ -304,8 +309,8 @@ export class SeedService {
     );
 
     const comment5ForPage1 = await this.pageCommentsService.create(
-      title1.id,
-      chapter1ForTitle1.id,
+      title5.id,
+      chapter1ForTitle5.id,
       page1ForChaper1.id,
       user1.id,
       'message from user 1 to page1 second not nested',
@@ -313,8 +318,8 @@ export class SeedService {
     );
 
     const comment6ForPage1 = await this.pageCommentsService.create(
-      title1.id,
-      chapter1ForTitle1.id,
+      title5.id,
+      chapter1ForTitle5.id,
       page1ForChaper1.id,
       user2.id,
       'message from user 2 to user 1 on page1 second',
@@ -322,11 +327,11 @@ export class SeedService {
     );
 
     await this.db.rating.create({
-      data: { userId: user1.id, titleId: title1.id, value: 8 },
+      data: { userId: user1.id, titleId: title5.id, value: 8 },
     });
 
     await this.db.rating.create({
-      data: { userId: user2.id, titleId: title1.id, value: 5 },
+      data: { userId: user2.id, titleId: title5.id, value: 5 },
     });
   }
 

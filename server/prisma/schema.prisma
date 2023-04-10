@@ -14,6 +14,7 @@ model User {
   email    String  @unique
   password String
   hashedRT String?
+  imgUrl   String  @default("https://mangalib.me/uploads/users/34417/cszRhLbgYv.jpg")
 
   lists         List[]
   titleComments TitleComment[]
@@ -70,6 +71,7 @@ model Title {
   status      TitleStatus @default(ANNOUNCEMENT)
   yearRelease Int         @default(1990)
   rating      Float       @default(0)
+  imgUrl      String      @default("https://mangalib.me/sono-bisque-doll-wa-koi-wo-suru")
   authorId    Int?
 
   Author   Author?        @relation(fields: [authorId], references: [id])
@@ -85,7 +87,7 @@ model Title {
 
 model Chapter {
   id     Int    @id @default(autoincrement())
-  name   String
+  name   String?
   number Int
   volume Int
 

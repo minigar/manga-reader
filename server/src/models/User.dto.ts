@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class UserBodyModel {
   @IsString()
@@ -35,4 +41,8 @@ export class UserUpdate {
   @IsString()
   @IsNotEmpty()
   password?: string;
+
+  @IsOptional()
+  @IsUrl()
+  imgUrl: string;
 }
