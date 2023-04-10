@@ -39,8 +39,8 @@ export class SeedService {
 
     const user1 = await this.db.user.create({
       data: {
-        name: 'user1',
-        email: 'user1@gmail.com',
+        name: 'hi1',
+        email: 'hi@gmail.com',
         password: '1234',
         isAdmin: true,
       },
@@ -97,6 +97,7 @@ export class SeedService {
         authorId: Oda.id,
         imgUrl:
           'https://cover.imglib.info/uploads/cover/btoom/cover/oIICYMFMS4SH_250x350.jpg',
+        rating: 8,
       },
     });
 
@@ -110,6 +111,7 @@ export class SeedService {
         authorId: Oda.id,
         imgUrl:
           'https://cover.imglib.info/uploads/cover/berserk/cover/QPXzTLH6zrIw_250x350.jpg',
+        rating: 10,
       },
     });
 
@@ -123,6 +125,7 @@ export class SeedService {
         authorId: Oda.id,
         imgUrl:
           'https://cover.imglib.info/uploads/cover/claymore/cover/IvGp6xsjocAM_250x350.jpg',
+        rating: 9,
       },
     });
 
@@ -136,6 +139,7 @@ export class SeedService {
         authorId: Oda.id,
         imgUrl:
           'https://cover.imglib.info/uploads/cover/dwaejiuri-/cover/HoQzzL1Ov53y_250x350.jpg',
+        rating: 4,
       },
     });
 
@@ -148,6 +152,7 @@ export class SeedService {
         authorId: Oda.id,
         imgUrl:
           'https://cover.imglib.info/uploads/cover/kanojo-no-tokutousek-sh1r0/cover/ymhV8i3Tglsd_250x350.jpg',
+        rating: 8,
       },
     });
     // _______________________
@@ -325,14 +330,6 @@ export class SeedService {
       'message from user 2 to user 1 on page1 second',
       comment1ForPage1.id,
     );
-
-    await this.db.rating.create({
-      data: { userId: user1.id, titleId: title5.id, value: 8 },
-    });
-
-    await this.db.rating.create({
-      data: { userId: user2.id, titleId: title5.id, value: 5 },
-    });
   }
 
   async createRequiredUserLists(userId: number) {
