@@ -19,12 +19,14 @@ export class ChapterService {
     return chapters;
   }
 
-  async getById(titleId: number, id: number) {
-    const title = await this.db.title.findFirst({ where: { id: titleId } });
+  async getById(titleId: number, number: number) {
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
-    const chapter = await this.db.chapter.findFirst({ where: { id } });
+    const chapter = await this.db.chapter.findFirst({
+      where: { titleId, number },
+    });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 

@@ -12,12 +12,16 @@ import {
 import { Public } from 'src/common/decorators';
 import { successResponse } from 'src/helpers/success-response';
 import { ChapterService } from 'src/services/chapter.service';
-import { ChapterBodyModel } from '../models/Chapter.dto';
+import {
+  ChapterBodyModel,
+  ChapterUpdateBodyModel,
+} from '../models/Chapter.dto';
 import { SortBodyModel } from '../models/SortBodyModel';
 
 @Controller('titles/:titleId/chapters')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) {}
+
   @Get()
   @Public()
   async getList(
@@ -29,13 +33,13 @@ export class ChapterController {
     );
   }
 
-  @Get(':id')
+  @Get(':c')
   @Public()
   async getById(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('c', ParseIntPipe) number: number,
   ) {
-    return successResponse(await this.chapterService.getById(titleId, id));
+    return successResponse(await this.chapterService.getById(titleId, number));
   }
 
   @Post()
@@ -52,7 +56,7 @@ export class ChapterController {
   async updateById(
     @Param('titleId', ParseIntPipe) titleId: number,
     @Param('id', ParseIntPipe) id: number,
-    @Body() { name }: ChapterBodyModel,
+    @Body() { name }: ChapterUpdateBodyModel,
   ) {
     return successResponse(
       await this.chapterService.updateById(titleId, id, name),
