@@ -5,64 +5,78 @@ import {
   ChapterErrorKey,
   GeneralErrorKey,
   PageErrorKey,
+  TitleErrorKey,
 } from 'src/controllers/errorKeys';
 
 @Injectable()
 export class PageService {
   constructor(private readonly db: DatabaseService) {}
 
-  async getList(
-    titleId: number,
-    chapterId: number,
-    page: number,
-    perPage: number,
-  ) {
+  async getList(titleId: number, c: number, page: number, perPage: number) {
+    let skip: number;
+    let take: number;
+
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
     const chapter = await this.db.chapter.findFirst({
-      where: { id: chapterId },
+      where: { number: c, titleId },
     });
+
+    if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
     const isMatches = titleId === chapter.titleId;
 
     if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
-    const offset = (page - 1) * perPage;
+    if (page && perPage) {
+      take = Number(perPage);
+      skip = (Number(page) - 1) * take;
+    }
 
     const pages = await this.db.page.findMany({
-      where: { chapterId },
-      skip: offset,
-      take: perPage,
+      where: { chapterId: chapter.id },
+      skip,
+      take,
       orderBy: { number: 'asc' },
     });
 
     return pages;
   }
 
-  async getById(titleId: number, chapterId: number, id: number) {
+  async getById(titleId: number, c: number, number: number) {
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
     const chapter = await this.db.chapter.findFirst({
-      where: { id: chapterId },
+      where: { number: c, titleId },
+      select: { id: true, titleId: true },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
-    const isMatches = titleId === chapter.titleId;
+    const isMatches = title.id === chapter.titleId;
 
     if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
-    const page = await this.db.page.findFirst({ where: { id } });
+    const page = await this.db.page.findFirst({
+      where: { chapterId: chapter.id, number },
+    });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
     return page;
   }
 
-  async create(
-    titleId: number,
-    chapterId: number,
-    imgUri: string,
-    number: number,
-  ) {
+  async create(titleId: number, c: number, imgUri: string, number: number) {
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
     const chapter = await this.db.chapter.findFirst({
-      where: { id: chapterId },
+      where: { number: c, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
@@ -71,25 +85,28 @@ export class PageService {
 
     if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
-    const page = await this.db.page.create({
+    const page = await this.db.page.findFirst({
+      where: { number, chapterId: chapter.id },
+    });
+
+    if (page) throw new BusinessError('This number already exist');
+
+    return await this.db.page.create({
       data: {
         imgUri,
         number,
-        chapterId,
+        chapterId: chapter.id,
       },
     });
-
-    return page;
   }
 
-  async updateById(
-    titleId: number,
-    chapterId: number,
-    id: number,
-    imgUri: string,
-  ) {
+  async updateById(titleId: number, c: number, number: number, imgUri: string) {
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
     const chapter = await this.db.chapter.findFirst({
-      where: { id: chapterId },
+      where: { number: c, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
@@ -99,17 +116,19 @@ export class PageService {
     if (!isMatchesTitleId)
       throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Title Id');
 
-    const page = await this.db.page.findFirst({ where: { id } });
+    const page = await this.db.page.findFirst({
+      where: { number, chapterId: chapter.id },
+    });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
-    const isMatchesChapterId = page.chapterId === chapterId;
+    const isMatches = page.chapterId === chapter.id;
 
-    if (!isMatchesChapterId)
+    if (!isMatches)
       throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Chapter Id');
 
     const updatedPage = await this.db.page.update({
-      where: { id },
+      where: { id: page.id },
       data: {
         imgUri,
       },
@@ -118,9 +137,13 @@ export class PageService {
     return updatedPage;
   }
 
-  async delete(titleId: number, chapterId: number, id: number) {
+  async delete(titleId: number, c: number, number: number) {
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
     const chapter = await this.db.chapter.findFirst({
-      where: { id: chapterId },
+      where: { number: c, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
@@ -130,13 +153,18 @@ export class PageService {
     if (!isMatchesTitleId)
       throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Title Id');
 
-    const page = await this.db.page.findFirst({ where: { id } });
+    const page = await this.db.page.findFirst({
+      where: { number, chapterId: chapter.id },
+    });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
-    const isMatches = page.chapterId === chapterId;
+    const isMatches = page.chapterId === chapter.id;
 
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
+    if (!isMatches)
+      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Chapter Id');
+
+    await this.db.page.delete({ where: { id: page.id } });
     return;
   }
 }

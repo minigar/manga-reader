@@ -19,12 +19,14 @@ export class ChapterService {
     return chapters;
   }
 
-  async getById(titleId: number, id: number) {
-    const title = await this.db.title.findFirst({ where: { id: titleId } });
+  async getById(titleId: number, number: number) {
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
-    const chapter = await this.db.chapter.findFirst({ where: { id } });
+    const chapter = await this.db.chapter.findFirst({
+      where: { titleId, number },
+    });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
@@ -38,7 +40,13 @@ export class ChapterService {
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
-    const chapter = await this.db.chapter.create({
+    const chapter = await this.db.chapter.findFirst({
+      where: { titleId, number },
+    });
+
+    if (chapter) throw new BusinessError('This Number already exists');
+
+    const newChapter = await this.db.chapter.create({
       data: {
         name,
         number,
@@ -47,22 +55,24 @@ export class ChapterService {
       },
     });
 
-    return chapter;
+    return newChapter;
   }
 
-  async updateById(titleId: number, id: number, name: string) {
+  async updateById(titleId: number, number: number, name: string) {
     await validName(name);
 
     const title = await this.db.title.findFirst({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
-    const chapter = await this.db.chapter.findFirst({ where: { id } });
+    const chapter = await this.db.chapter.findFirst({
+      where: { titleId, number },
+    });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
     const updatedChapter = await this.db.chapter.update({
-      where: { id },
+      where: { id: chapter.id },
       data: {
         name,
       },
@@ -71,12 +81,18 @@ export class ChapterService {
     return updatedChapter;
   }
 
-  async delete(id: number) {
-    const chapter = await this.db.chapter.findFirst({ where: { id } });
+  async delete(number: number, titleId: number) {
+    const title = await this.db.title.findFirst({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    const chapter = await this.db.chapter.findFirst({
+      where: { titleId, number },
+    });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
-    await this.db.chapter.delete({ where: { id } });
+    await this.db.chapter.delete({ where: { id: chapter.id } });
     return;
   }
 }

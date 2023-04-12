@@ -20,6 +20,12 @@ export class ChapterBodyModel {
   volume: number;
 }
 
+export class ChapterUpdateBodyModel {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+}
+
 export class ChapterQuerySort {
   @IsOptional()
   @IsNumberString()

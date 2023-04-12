@@ -6,6 +6,7 @@ import { TitleCommentsService } from './title-comments.service';
 import { PageService } from './page.service';
 import { ChapterService } from './chapter.service';
 import { PageCommentsService } from './page-comments.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class SeedService {
@@ -39,9 +40,9 @@ export class SeedService {
 
     const user1 = await this.db.user.create({
       data: {
-        name: 'hi1',
+        name: 'hii1',
         email: 'hi@gmail.com',
-        password: '1234',
+        password: await bcrypt.hash('qwerty', 10),
         isAdmin: true,
       },
     });
@@ -50,9 +51,9 @@ export class SeedService {
 
     const user2 = await this.db.user.create({
       data: {
-        name: 'user2',
-        email: 'user2@gmail.com',
-        password: '1234',
+        name: 'hii2',
+        email: 'hi2@gmail.com',
+        password: await bcrypt.hash('qwerty', 10),
         isAdmin: true,
       },
     });
@@ -98,6 +99,7 @@ export class SeedService {
         imgUrl:
           'https://cover.imglib.info/uploads/cover/btoom/cover/oIICYMFMS4SH_250x350.jpg',
         rating: 8,
+        yearRelease: 1895,
       },
     });
 
@@ -112,6 +114,7 @@ export class SeedService {
         imgUrl:
           'https://cover.imglib.info/uploads/cover/berserk/cover/QPXzTLH6zrIw_250x350.jpg',
         rating: 10,
+        yearRelease: 2001,
       },
     });
 
@@ -126,6 +129,7 @@ export class SeedService {
         imgUrl:
           'https://cover.imglib.info/uploads/cover/claymore/cover/IvGp6xsjocAM_250x350.jpg',
         rating: 9,
+        yearRelease: 2003,
       },
     });
 
@@ -140,6 +144,7 @@ export class SeedService {
         imgUrl:
           'https://cover.imglib.info/uploads/cover/dwaejiuri-/cover/HoQzzL1Ov53y_250x350.jpg',
         rating: 4,
+        yearRelease: 2023,
       },
     });
 
@@ -153,6 +158,7 @@ export class SeedService {
         imgUrl:
           'https://cover.imglib.info/uploads/cover/kanojo-no-tokutousek-sh1r0/cover/ymhV8i3Tglsd_250x350.jpg',
         rating: 8,
+        yearRelease: 2020,
       },
     });
     // _______________________
@@ -229,49 +235,49 @@ export class SeedService {
 
     const page1ForChaper1 = await this.pageService.create(
       title5.id,
-      chapter1ForTitle5.id,
+      chapter1ForTitle5.number,
       'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn001.png.jpg',
       1,
     );
 
     const page2ForChaper1 = await this.pageService.create(
       title5.id,
-      chapter1ForTitle5.id,
+      chapter1ForTitle5.number,
       'https://img2.mixlib.me//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn002.png.jpg',
       2,
     );
 
     const page3ForChaper1 = await this.pageService.create(
       title5.id,
-      chapter1ForTitle5.id,
+      chapter1ForTitle5.number,
       'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn003.png.jpg',
       3,
     );
 
     const page4orChaper1 = await this.pageService.create(
       title5.id,
-      chapter1ForTitle5.id,
+      chapter1ForTitle5.number,
       'https://img2.mixlib.me//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn004.png.jpg',
       4,
     );
 
     const page5ForChaper1 = await this.pageService.create(
       title5.id,
-      chapter1ForTitle5.id,
+      chapter1ForTitle5.number,
       'https://img2.mixlib.me//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn005.png.jpg',
       5,
     );
 
     const page6ForChaper1 = await this.pageService.create(
       title5.id,
-      chapter1ForTitle5.id,
+      chapter1ForTitle5.number,
       'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn006.png.jpg',
       6,
     );
 
     const page7ForChaper1 = await this.pageService.create(
       title5.id,
-      chapter1ForTitle5.id,
+      chapter1ForTitle5.number,
       'https://img33.imgslib.link//manga/kanojo-no-tokutousek-sh1r0/chapters/1-1/nn010.png.jpg',
       7,
     );
@@ -279,8 +285,8 @@ export class SeedService {
 
     const comment1ForPage1 = await this.pageCommentsService.create(
       title5.id,
-      chapter1ForTitle5.id,
-      page1ForChaper1.id,
+      chapter1ForTitle5.number,
+      page1ForChaper1.number,
       user1.id,
       'message from user 1 to page1',
       null,
@@ -288,8 +294,8 @@ export class SeedService {
 
     const comment2ForPage1 = await this.pageCommentsService.create(
       title5.id,
-      chapter1ForTitle5.id,
-      page1ForChaper1.id,
+      chapter1ForTitle5.number,
+      page1ForChaper1.number,
       user2.id,
       'message from user 2 to user 1 on page1',
       comment1ForPage1.id,
@@ -297,8 +303,8 @@ export class SeedService {
 
     const comment3ForPage1 = await this.pageCommentsService.create(
       title5.id,
-      chapter1ForTitle5.id,
-      page1ForChaper1.id,
+      chapter1ForTitle5.number,
+      page1ForChaper1.number,
       user2.id,
       'message from user 2 to user 2 on page1',
       comment2ForPage1.id,
@@ -306,8 +312,8 @@ export class SeedService {
 
     const comment4ForPage1 = await this.pageCommentsService.create(
       title5.id,
-      chapter1ForTitle5.id,
-      page1ForChaper1.id,
+      chapter1ForTitle5.number,
+      page1ForChaper1.number,
       user2.id,
       'message from user 2 to page1',
       null,
@@ -315,8 +321,8 @@ export class SeedService {
 
     const comment5ForPage1 = await this.pageCommentsService.create(
       title5.id,
-      chapter1ForTitle5.id,
-      page1ForChaper1.id,
+      chapter1ForTitle5.number,
+      page1ForChaper1.number,
       user1.id,
       'message from user 1 to page1 second not nested',
       null,
@@ -324,8 +330,8 @@ export class SeedService {
 
     const comment6ForPage1 = await this.pageCommentsService.create(
       title5.id,
-      chapter1ForTitle5.id,
-      page1ForChaper1.id,
+      chapter1ForTitle5.number,
+      page1ForChaper1.number,
       user2.id,
       'message from user 2 to user 1 on page1 second',
       comment1ForPage1.id,
