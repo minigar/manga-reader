@@ -52,19 +52,22 @@ export class ChapterController {
     );
   }
 
-  @Put(':id')
+  @Put(':number')
   async updateById(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('number', ParseIntPipe) number: number,
     @Body() { name }: ChapterUpdateBodyModel,
   ) {
     return successResponse(
-      await this.chapterService.updateById(titleId, id, name),
+      await this.chapterService.updateById(titleId, number, name),
     );
   }
 
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
-    return successResponse(await this.chapterService.delete(id));
+  @Delete(':number')
+  async delete(
+    @Param('number', ParseIntPipe) number: number,
+    @Param('titleId', ParseIntPipe) titleId: number,
+  ) {
+    return successResponse(await this.chapterService.delete(number, titleId));
   }
 }

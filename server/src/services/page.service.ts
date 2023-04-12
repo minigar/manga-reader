@@ -143,7 +143,7 @@ export class PageService {
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { number: c },
+      where: { number: c, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
@@ -153,13 +153,16 @@ export class PageService {
     if (!isMatchesTitleId)
       throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Title Id');
 
-    const page = await this.db.page.findFirst({ where: { number } });
+    const page = await this.db.page.findFirst({
+      where: { number, chapterId: chapter.id },
+    });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
     const isMatches = page.chapterId === chapter.id;
 
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
+    if (!isMatches)
+      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Chapter Id');
 
     await this.db.page.delete({ where: { id: page.id } });
     return;

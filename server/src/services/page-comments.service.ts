@@ -14,24 +14,60 @@ import {
 export class PageCommentsService {
   constructor(private readonly db: DatabaseService) {}
   async getList(
-    pageId: number,
+    titleId: number,
+    chapterNumber: number,
+    pageNumber: number,
     page: number,
     perPage: number,
     parentId: number | null = null,
   ) {
-    const offset = (page - 1) * perPage;
+    let skip: number;
+    let take: number;
+
+    if (page && perPage) {
+      take = Number(perPage);
+      skip = (Number(page) - 1) * take;
+    }
+
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
+    const chapter = await this.db.chapter.findFirst({
+      where: { number: chapterNumber, titleId },
+    });
+
+    if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    const isMatchesTitleId = titleId === chapter.titleId;
+
+    if (!isMatchesTitleId)
+      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Title Id');
+
+    const pageForComments = await this.db.page.findFirst({
+      where: { number: pageNumber, chapterId: chapter.id },
+    });
+
+    if (!pageForComments) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
+
+    const isMatches = pageForComments.chapterId === chapter.id;
+
+    if (!isMatches)
+      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Chapter Id');
 
     const comments = await this.db.pageComment.findMany({
-      where: { pageId, parentId },
-      skip: offset,
-      take: perPage,
+      where: { pageId: pageForComments.id, parentId },
+      skip,
+      take,
       orderBy: { createdAt: 'asc' },
     });
 
     const childComments = await Promise.all(
       comments.map(async (comment) => {
         const nestedComments = await this.getList(
-          pageId,
+          titleId,
+          chapterNumber,
+          pageNumber,
           page,
           perPage,
           comment.id,
@@ -48,8 +84,8 @@ export class PageCommentsService {
 
   async create(
     titleId: number,
-    chapterId: number,
-    pageId: number,
+    chapterNumber: number,
+    pageNumber: number,
     userId: number,
     message: string,
     parentId: number,
@@ -59,19 +95,21 @@ export class PageCommentsService {
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { id: chapterId },
+      where: { titleId, number: chapterNumber },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
-
-    const page = await this.db.page.findFirst({ where: { id: pageId } });
-
-    if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
     const isTitleIdMatches = title.id === chapter.titleId;
 
     if (!isTitleIdMatches)
       throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'titleId');
+
+    const page = await this.db.page.findFirst({
+      where: { chapterId: chapter.id, number: pageNumber },
+    });
+
+    if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
     const isChapterIdMatches = chapter.id === page.chapterId;
 
@@ -80,7 +118,7 @@ export class PageCommentsService {
 
     const comment = await this.db.pageComment.create({
       data: {
-        pageId,
+        pageId: page.id,
         userId,
         parentId: parentId || null,
         message,
@@ -92,9 +130,9 @@ export class PageCommentsService {
 
   async updateById(
     id: number,
-    pageId: number,
     titleId: number,
-    chapterId: number,
+    chapterNumber: number,
+    pageNumber: number,
     userId: number,
     message: string,
   ) {
@@ -103,32 +141,41 @@ export class PageCommentsService {
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { id: chapterId },
+      where: { titleId, number: chapterNumber },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
-
-    const page = await this.db.page.findFirst({ where: { id: pageId } });
-
-    if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
-
-    const comment = await this.db.pageComment.findFirst({ where: { id } });
-
-    if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
 
     const isTitleIdMatches = titleId === chapter.titleId;
 
     if (!isTitleIdMatches)
       throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'titleId');
 
+    const page = await this.db.page.findFirst({
+      where: { chapterId: chapter.id, number: pageNumber },
+    });
+
+    if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
+
     const isChapterIdMatches = chapter.id === page.chapterId;
 
     if (!isChapterIdMatches)
       throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'chapterId');
 
+    const comment = await this.db.pageComment.findFirst({
+      where: { id, pageId: page.id },
+    });
+
+    if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
+
     const user = await this.db.user.findFirst({ where: { id: userId } });
 
     if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
+
+    const isMatches = userId === comment.userId;
+
+    if (!isMatches)
+      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'user Id');
 
     const updatedComment = await this.db.pageComment.update({
       where: { id },
@@ -140,10 +187,50 @@ export class PageCommentsService {
     return updatedComment;
   }
 
-  async deleteById(userId: number, id: number) {
-    const comment = await this.db.pageComment.findFirst({ where: { id } });
+  async deleteById(
+    id: number,
+    titleId: number,
+    chapterNumber: number,
+    pageNumber: number,
+    userId: number,
+  ) {
+    const title = await this.db.title.findFirst({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
+    const chapter = await this.db.chapter.findFirst({
+      where: { titleId, number: chapterNumber },
+    });
+
+    if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
+
+    const isTitleIdMatches = titleId === chapter.titleId;
+
+    if (!isTitleIdMatches)
+      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'titleId');
+
+    const page = await this.db.page.findFirst({
+      where: { chapterId: chapter.id, number: pageNumber },
+    });
+
+    if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
+
+    const isChapterIdMatches = chapter.id === page.chapterId;
+
+    if (!isChapterIdMatches)
+      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'chapterId');
+
+    const comment = await this.db.pageComment.findFirst({
+      where: { id, pageId: page.id },
+    });
 
     if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
+
+    const user = await this.db.user.findFirst({ where: { id: userId } });
+
+    if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
+
+    // ___________________________________________________________________
 
     const isMatches = userId === comment.userId;
 

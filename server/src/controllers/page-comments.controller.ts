@@ -15,21 +15,27 @@ import { CurrentUser } from '../common/decorators/CurrentUser.decorator';
 import { PageCommentsService } from '../services/page-comments.service';
 import { PaginationBodyModel } from '../models/Pagination.dto';
 
-@Controller('titles/:titleId/chapters/:chapterId/pages/:pageId/comments')
+@Controller(
+  'titles/:titleId/chapters/:chapterNumber/pages/:pageNumber/comments',
+)
 export class PageCommentsController {
   constructor(private readonly pageCommentsService: PageCommentsService) {}
 
   @Public()
   @Get()
   async getList(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('titleId', ParseIntPipe) titleId: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
+    @Param('pageNumber', ParseIntPipe) pageNumber: number,
     @Query() { page, perPage }: PaginationBodyModel,
   ) {
     return successResponse(
       await this.pageCommentsService.getList(
-        pageId,
-        Number(page),
-        Number(perPage),
+        titleId,
+        chapterNumber,
+        pageNumber,
+        page,
+        perPage,
       ),
     );
   }
@@ -37,8 +43,8 @@ export class PageCommentsController {
   @Post(':parentId?')
   async create(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('chapterId', ParseIntPipe) chapterId: number,
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
+    @Param('pageNumber', ParseIntPipe) pageNumber: number,
     @CurrentUser() { userId },
     @Body('message') message: string,
     @Param('parentId') parentId?: number,
@@ -46,8 +52,8 @@ export class PageCommentsController {
     return successResponse(
       await this.pageCommentsService.create(
         titleId,
-        chapterId,
-        pageId,
+        chapterNumber,
+        pageNumber,
         userId,
         message,
         Number(parentId),
@@ -59,17 +65,17 @@ export class PageCommentsController {
   async updateById(
     @Param('id', ParseIntPipe) id: number,
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('chapterId', ParseIntPipe) chapterId: number,
-    @Param('pageId', ParseIntPipe) pageId: number,
-    @CurrentUser() { userId },
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
+    @Param('pageNumber', ParseIntPipe) pageNumber: number,
     @Body('message') message: string,
+    @CurrentUser() { userId },
   ) {
     return successResponse(
       await this.pageCommentsService.updateById(
         id,
-        pageId,
         titleId,
-        chapterId,
+        chapterNumber,
+        pageNumber,
         userId,
         message,
       ),
@@ -79,10 +85,19 @@ export class PageCommentsController {
   @Delete(':id')
   async deleteById(
     @Param('id', ParseIntPipe) id: number,
+    @Param('titleId', ParseIntPipe) titleId: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
+    @Param('pageNumber', ParseIntPipe) pageNumber: number,
     @CurrentUser() { userId },
   ) {
     return successResponse(
-      await this.pageCommentsService.deleteById(userId, id),
+      await this.pageCommentsService.deleteById(
+        id,
+        titleId,
+        chapterNumber,
+        pageNumber,
+        userId,
+      ),
     );
   }
 }
