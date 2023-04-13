@@ -13,12 +13,22 @@ export class TitleCommentsService {
     perPage: number,
     parentId: number | null = null,
   ) {
-    const offset = (page - 1) * perPage;
+    let skip: number;
+    let take: number;
+
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
+    if (page && perPage) {
+      take = Number(perPage);
+      skip = (Number(page) - 1) * take;
+    }
 
     const comments = await this.db.titleComment.findMany({
       where: { titleId, parentId },
-      skip: offset,
-      take: perPage,
+      skip,
+      take,
       orderBy: { createdAt: 'asc' },
     });
 

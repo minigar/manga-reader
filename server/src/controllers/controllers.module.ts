@@ -15,6 +15,8 @@ import { GenreController } from './genre.controller';
 import { SeedController } from './seed.controller';
 import { RatingController } from './rating.controller';
 import { AuthorController } from './author.controller';
+import { ChapterLikesController } from './chapter-likes.controller';
+import { TitleCommentLikesController } from './title-comment-likes.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -32,6 +34,8 @@ import { AuthorController } from './author.controller';
     SeedController,
     RatingController,
     AuthorController,
+    ChapterLikesController,
+    TitleCommentLikesController,
   ],
 })
 export class ControllersModule {}

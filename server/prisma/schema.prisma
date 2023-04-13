@@ -7,6 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Author {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+
+  titles Title[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model User {
   id Int @id @default(autoincrement())
 
@@ -16,24 +27,18 @@ model User {
   hashedRT String?
   imgUrl   String  @default("https://mangalib.me/uploads/users/34417/cszRhLbgYv.jpg")
 
-  lists         List[]
-  titleComments TitleComment[]
-  pageComments  PageComment[]
-  rating        Rating[]
+  lists               List[]
+  rating              Rating[]
+  pageComments        PageComment[]
+  chapterLikes        ChapterLike[]
+  titleComments       TitleComment[]
+  PageCommentLike     PageCommentLike[]
+  TitleCommentLike    TitleCommentLike[]
+  PageCommentDislike  PageCommentDislike[]
+  TitleCommentDislike TitleCommentDislike[]
 
   role    Role    @default(USER)
   isAdmin Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Author {
-  id Int @id @default(autoincrement())
-
-  name String @unique
-
-  titles Title[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -72,32 +77,103 @@ model Title {
   yearRelease Int         @default(1990)
   rating      Float       @default(0)
   imgUrl      String      @default("https://mangalib.me/sono-bisque-doll-wa-koi-wo-suru")
-  authorId    Int?
 
-  Author   Author?        @relation(fields: [authorId], references: [id])
+  Author   Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
+
+  list     List[]
   genres   Genre[]
+  ratings  Rating[]
   chapters Chapter[]
   comments TitleComment[]
-  list     List[]
-  ratings  Rating[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model Rating {
+  id    Int   @id @default(autoincrement())
+  value Float @default(0)
+
+  title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  titleId Int
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique(name: "titleId_userId", [titleId, userId])
+}
+
+model TitleComment {
+  id         Int    @id @default(autoincrement())
+  message    String
+  likeAmount Int    @default(0)
+
+  likes    TitleCommentLike[]
+  dislikes TitleCommentDislike[]
+
+  parent   TitleComment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children TitleComment[] @relation("ParentChild")
+  parentId Int?
+
+  Title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  titleId Int
+
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TitleCommentLike {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  comment   TitleComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int
+
+  @@id(name: "id", [userId, commentId])
+}
+
+model TitleCommentDislike {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  comment   TitleComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int
+
+  @@id(name: "id", [userId, commentId])
+}
+
 model Chapter {
-  id     Int    @id @default(autoincrement())
+  id     Int     @id @default(autoincrement())
   name   String?
   number Int
   volume Int
 
-  Title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  Title   Title         @relation(fields: [titleId], references: [id], onDelete: Cascade)
   titleId Int
+  likes   ChapterLike[]
 
   pages Page[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ChapterLike {
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([chapterId, userId])
 }
 
 model Page {
@@ -115,8 +191,12 @@ model Page {
 }
 
 model PageComment {
-  id      Int    @id @default(autoincrement())
-  message String
+  id         Int    @id @default(autoincrement())
+  message    String
+  likeAmount Int    @default(0)
+
+  likes    PageCommentLike[]
+  dislikes PageCommentDislike[]
 
   parent   PageComment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
   children PageComment[] @relation("ParentChild")
@@ -132,52 +212,24 @@ model PageComment {
   updatedAt DateTime @updatedAt
 }
 
-model TitleComment {
-  id      Int    @id @default(autoincrement())
-  message String
-
-  parent   TitleComment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
-  children TitleComment[] @relation("ParentChild")
-  parentId Int?
-
-  Title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
-  titleId Int
-
-  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model PageCommentLike {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  comment   PageComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int
+
+  @@id(name: "id", [userId, commentId])
 }
 
-model Rating {
-  id    Int   @id @default(autoincrement())
-  value Float @default(0)
+model PageCommentDislike {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
 
-  title   Title @relation(fields: [titleId], references: [id])
-  titleId Int
-  user    User  @relation(fields: [userId], references: [id])
-  userId  Int
+  comment   PageComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique(name: "titleId_userId", [titleId, userId])
-}
-
-enum Role {
-  USER
-  ADMIN
-  AUTHOR
-}
-
-//ARTIST TODO
-
-enum TitleType {
-  MANGA
-  MANHWA
-  MAMHUA
-  COMICS
+  @@id(name: "id", [userId, commentId])
 }
 
 enum TitleStatus {
@@ -185,4 +237,16 @@ enum TitleStatus {
   ONGOING
   FINISHED
   SUSPENDED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TitleType {
+  MANGA
+  MANHWA
+  MAMHUA
+  COMICS
 }

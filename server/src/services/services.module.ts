@@ -14,6 +14,8 @@ import { GenreService } from './genre.service';
 import { SeedService } from './seed.service';
 import { RatingService } from './rating.service';
 import { AuthorService } from './author.service';
+import { ChapterLikesService } from './chapter-likes.service';
+import { TitleCommentLikesService } from './title-comment-likes.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -31,6 +33,8 @@ import { AuthorService } from './author.service';
     SeedService,
     RatingService,
     AuthorService,
+    ChapterLikesService,
+    TitleCommentLikesService,
   ],
   exports: [
     UserService,
@@ -46,6 +50,8 @@ import { AuthorService } from './author.service';
     SeedService,
     RatingService,
     AuthorService,
+    ChapterLikesService,
+    TitleCommentLikesService,
   ],
 })
 export class ServiceModule {}
