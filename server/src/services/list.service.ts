@@ -3,7 +3,7 @@ import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { UserErrorKey } from '../controllers/errorKeys/UserErrorKey';
 import { ListErrorKey } from '../controllers/errorKeys/ListErrorKey';
-import { GeneralErrorKey, TitleErrorKey } from 'src/controllers/errorKeys';
+import { TitleErrorKey } from 'src/controllers/errorKeys';
 
 const ListIncludes = {
   titles: {
@@ -95,17 +95,9 @@ export class ListService {
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
-    const list = await this.db.list.findFirst({ where: { id } });
+    const list = await this.db.list.findFirst({ where: { id, userId } });
 
     if (!list) throw new BusinessError(ListErrorKey.LIST_NOT_FOUND);
-
-    const user = await this.db.user.findFirst({ where: { id: userId } });
-
-    if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
-
-    const isMatches = userId === list.userId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     const updatedList = await this.db.list.update({
       where: {

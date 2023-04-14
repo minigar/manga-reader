@@ -73,13 +73,11 @@ export class TitleCommentsService {
   }
 
   async updateById(userId: number, id: number, message: string) {
-    const comment = await this.db.titleComment.findFirst({ where: { id } });
+    const comment = await this.db.titleComment.findFirst({
+      where: { id, userId },
+    });
 
     if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
-
-    const isMatches = userId === comment.userId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     const updatedComment = await this.db.titleComment.update({
       where: { id },
@@ -92,13 +90,11 @@ export class TitleCommentsService {
   }
 
   async deleteById(userId: number, id: number) {
-    const comment = await this.db.titleComment.findFirst({ where: { id } });
+    const comment = await this.db.titleComment.findFirst({
+      where: { id, userId },
+    });
 
     if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
-
-    const isMatches = userId === comment.userId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     await this.db.titleComment.delete({ where: { id } });
 
