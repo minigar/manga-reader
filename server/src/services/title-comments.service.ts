@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
-import { CommentsErrorKey, GeneralErrorKey } from 'src/controllers/errorKeys';
+import { CommentsErrorKey } from 'src/controllers/errorKeys';
 
 @Injectable()
 export class TitleCommentsService {
