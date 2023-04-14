@@ -8,3 +8,4 @@ export * from './PageErrorKey';
 export * from './CommentsErrorKey';
 export * from './RatingErrorKey';
 export * from './AuthorErrorKey';
+export * from './LikeErrorKey';
