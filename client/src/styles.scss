@@ -19,6 +19,8 @@ $basic-green-color: #4CAF50;
   opacity: 1;
 }
 
+$setup-shadow: 0 0 10px #ccc;
+
 @mixin setFontStyles($font-family, $font-weight) {
   font-family: $font-family;
   font-weight: $font-weight;

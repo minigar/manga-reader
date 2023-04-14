@@ -21,7 +21,7 @@
     padding: 20px;
     background-color: $basic-white-color;
     border-radius: 10px;
-    box-shadow: 0 0 10px #ccc;
+    box-shadow: $setup-shadow;
 
     label {
       margin-top: 10px;
@@ -61,10 +61,6 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease-in-out;
-
-      &:hover {
-        background-color: $basic-green-color;
-      }
     }
   }
 }

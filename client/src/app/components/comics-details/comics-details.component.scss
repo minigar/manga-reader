@@ -1,0 +1,81 @@
+@import '../../../styles.scss';
+
+.detailsBlock {
+  padding: 35px 50px 25px 50px;
+  min-height: calc(100vh - 56px);
+  height: auto;
+
+  .info {
+    display: flex;
+    column-gap: 35px;
+
+    .leftInfo {
+      width: 315px;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      row-gap: 18px;
+
+      .headerInfo {
+        width: 100%;
+        height: 100%;
+        border-radius: 6px;
+        box-shadow: $setup-shadow;
+
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 6%;
+        }
+      }
+
+      .infoContent {
+        padding: 18px 0 18px 0;
+        width: 100%;
+        height: 100%;
+        box-shadow: $setup-shadow;
+        display: flex;
+        flex-direction: column;
+        row-gap: 8px;
+
+        .infoBlock {
+
+          h4 {
+            padding-left: 15px;
+
+            &:first-child {
+              color: gray;
+            }
+          }
+
+        }
+      }
+    }
+
+    .rightInfo {
+      max-width: 100vw;
+      width: 100vw;
+      box-sizing: border-box;
+      box-shadow: $setup-shadow;
+      border-radius: 6px;
+
+      header {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 25px 0 25px;
+      }
+
+      ::ng-deep p-tabView {
+        ::ng-deep p-tabPanel {
+          background-color: #4CAF50;
+          height: 100%;
+        }
+      }
+
+    }
+  }
+
+}
