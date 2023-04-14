@@ -15,18 +15,18 @@ import { Public } from '../common/decorators/Public.decorator';
 import { PageBodyModel, PageUpdateBodyModel } from 'src/models/Page.dto';
 import { PaginationBodyModel } from '../models/Pagination.dto';
 
-@Controller('titles/:titleId/chapters/:c/pages')
+@Controller('titles/:titleId/chapters/:chapterNumber/pages')
 export class PageController {
   constructor(private readonly pageService: PageService) {}
   @Get()
   @Public()
   async getList(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('c', ParseIntPipe) c: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
     @Query() { page, perPage }: PaginationBodyModel,
   ) {
     return successResponse(
-      await this.pageService.getList(titleId, c, page, perPage),
+      await this.pageService.getList(titleId, chapterNumber, page, perPage),
     );
   }
 
@@ -34,41 +34,45 @@ export class PageController {
   @Public()
   async getById(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('c', ParseIntPipe) c: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
     @Param('number', ParseIntPipe) number: number,
   ) {
-    return successResponse(await this.pageService.getById(titleId, c, number));
+    return successResponse(
+      await this.pageService.getById(titleId, chapterNumber, number),
+    );
   }
 
   @Post()
   async create(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('c', ParseIntPipe) c: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
     @Body() { imgUri, number }: PageBodyModel,
   ) {
     return successResponse(
-      await this.pageService.create(titleId, c, imgUri, number),
+      await this.pageService.create(titleId, chapterNumber, imgUri, number),
     );
   }
 
   @Put(':number')
   async updateById(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('c', ParseIntPipe) c: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
     @Param('number', ParseIntPipe) number: number,
     @Body() { imgUri }: PageUpdateBodyModel,
   ) {
     return successResponse(
-      await this.pageService.updateById(titleId, c, number, imgUri),
+      await this.pageService.updateById(titleId, chapterNumber, number, imgUri),
     );
   }
 
   @Delete(':number')
   async delete(
     @Param('titleId', ParseIntPipe) titleId: number,
-    @Param('c', ParseIntPipe) c: number,
+    @Param('chapterNumber', ParseIntPipe) chapterNumber: number,
     @Param('number', ParseIntPipe) number: number,
   ) {
-    return successResponse(await this.pageService.delete(titleId, c, number));
+    return successResponse(
+      await this.pageService.delete(titleId, chapterNumber, number),
+    );
   }
 }

@@ -39,21 +39,11 @@ export class PageCommentsService {
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
-    const isMatchesTitleId = titleId === chapter.titleId;
-
-    if (!isMatchesTitleId)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Title Id');
-
     const pageForComments = await this.db.page.findFirst({
       where: { number: pageNumber, chapterId: chapter.id },
     });
 
     if (!pageForComments) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
-
-    const isMatches = pageForComments.chapterId === chapter.id;
-
-    if (!isMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Chapter Id');
 
     const comments = await this.db.pageComment.findMany({
       where: { pageId: pageForComments.id, parentId },
@@ -100,21 +90,11 @@ export class PageCommentsService {
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
-    const isTitleIdMatches = title.id === chapter.titleId;
-
-    if (!isTitleIdMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'titleId');
-
     const page = await this.db.page.findFirst({
       where: { chapterId: chapter.id, number: pageNumber },
     });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
-
-    const isChapterIdMatches = chapter.id === page.chapterId;
-
-    if (!isChapterIdMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'chapterId');
 
     const comment = await this.db.pageComment.create({
       data: {
@@ -146,36 +126,17 @@ export class PageCommentsService {
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
-    const isTitleIdMatches = titleId === chapter.titleId;
-
-    if (!isTitleIdMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'titleId');
-
     const page = await this.db.page.findFirst({
       where: { chapterId: chapter.id, number: pageNumber },
     });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
-    const isChapterIdMatches = chapter.id === page.chapterId;
-
-    if (!isChapterIdMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'chapterId');
-
     const comment = await this.db.pageComment.findFirst({
-      where: { id, pageId: page.id },
+      where: { id, pageId: page.id, userId },
     });
 
     if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
-
-    const user = await this.db.user.findFirst({ where: { id: userId } });
-
-    if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
-
-    const isMatches = userId === comment.userId;
-
-    if (!isMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'user Id');
 
     const updatedComment = await this.db.pageComment.update({
       where: { id },
@@ -204,37 +165,17 @@ export class PageCommentsService {
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
 
-    const isTitleIdMatches = titleId === chapter.titleId;
-
-    if (!isTitleIdMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'titleId');
-
     const page = await this.db.page.findFirst({
       where: { chapterId: chapter.id, number: pageNumber },
     });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
 
-    const isChapterIdMatches = chapter.id === page.chapterId;
-
-    if (!isChapterIdMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'chapterId');
-
     const comment = await this.db.pageComment.findFirst({
-      where: { id, pageId: page.id },
+      where: { id, pageId: page.id, userId },
     });
 
     if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
-
-    const user = await this.db.user.findFirst({ where: { id: userId } });
-
-    if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
-
-    // ___________________________________________________________________
-
-    const isMatches = userId === comment.userId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     await this.db.pageComment.delete({ where: { id } });
 

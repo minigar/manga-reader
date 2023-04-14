@@ -187,6 +187,14 @@ export class SeedService {
       'message from user 1 to title5',
     );
 
+    await this.db.titleCommentLike.create({
+      data: { userId: user1.id, commentId: comment1ForTitle5.id },
+    });
+
+    await this.db.titleCommentDislike.create({
+      data: { userId: user2.id, commentId: comment1ForTitle5.id },
+    });
+
     const comment2ForTitle5 = await this.titleCommentsService.create(
       title5.id,
       comment1ForTitle5.id,
@@ -291,6 +299,14 @@ export class SeedService {
       'message from user 1 to page1',
       null,
     );
+
+    await this.db.pageCommentLike.create({
+      data: { userId: user1.id, commentId: comment1ForPage1.id },
+    });
+
+    await this.db.pageCommentDislike.create({
+      data: { userId: user2.id, commentId: comment1ForPage1.id },
+    });
 
     const comment2ForPage1 = await this.pageCommentsService.create(
       title5.id,

@@ -26,11 +26,7 @@ export class TitleCommentsController {
     @Query() { page, perPage }: PaginationBodyModel,
   ) {
     return successResponse(
-      await this.titleCommentsService.getList(
-        titleId,
-        Number(page),
-        Number(perPage),
-      ),
+      await this.titleCommentsService.getList(titleId, page, perPage),
     );
   }
 

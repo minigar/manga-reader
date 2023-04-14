@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import { TitleErrorKey } from '../controllers/errorKeys/TitleErrorKey';
-import { CommentsErrorKey, GeneralErrorKey } from 'src/controllers/errorKeys';
+import { CommentsErrorKey } from 'src/controllers/errorKeys';
 
 @Injectable()
 export class TitleCommentsService {
@@ -13,12 +13,22 @@ export class TitleCommentsService {
     perPage: number,
     parentId: number | null = null,
   ) {
-    const offset = (page - 1) * perPage;
+    let skip: number;
+    let take: number;
+
+    const title = await this.db.title.findUnique({ where: { id: titleId } });
+
+    if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
+
+    if (page && perPage) {
+      take = Number(perPage);
+      skip = (Number(page) - 1) * take;
+    }
 
     const comments = await this.db.titleComment.findMany({
       where: { titleId, parentId },
-      skip: offset,
-      take: perPage,
+      skip,
+      take,
       orderBy: { createdAt: 'asc' },
     });
 
@@ -63,13 +73,11 @@ export class TitleCommentsService {
   }
 
   async updateById(userId: number, id: number, message: string) {
-    const comment = await this.db.titleComment.findFirst({ where: { id } });
+    const comment = await this.db.titleComment.findFirst({
+      where: { id, userId },
+    });
 
     if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
-
-    const isMatches = userId === comment.userId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     const updatedComment = await this.db.titleComment.update({
       where: { id },
@@ -82,13 +90,11 @@ export class TitleCommentsService {
   }
 
   async deleteById(userId: number, id: number) {
-    const comment = await this.db.titleComment.findFirst({ where: { id } });
+    const comment = await this.db.titleComment.findFirst({
+      where: { id, userId },
+    });
 
     if (!comment) throw new BusinessError(CommentsErrorKey.COMMENT_NOT_EXIST);
-
-    const isMatches = userId === comment.userId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     await this.db.titleComment.delete({ where: { id } });
 

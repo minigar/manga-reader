@@ -9,11 +9,14 @@ import { TitleService } from './title.service';
 import { TitleCommentsService } from './title-comments.service';
 import { ChapterService } from './chapter.service';
 import { PageService } from './page.service';
-import { PageCommentsService } from './page-comments.service';
 import { GenreService } from './genre.service';
 import { SeedService } from './seed.service';
 import { RatingService } from './rating.service';
 import { AuthorService } from './author.service';
+import { ChapterLikesService } from './chapter-likes.service';
+import { TitleCommentLikesService } from './title-comment-likes.service';
+import { PageCommentLikesService } from './page-comment-likes.service';
+import { PageCommentsService } from './page-comments.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -31,6 +34,9 @@ import { AuthorService } from './author.service';
     SeedService,
     RatingService,
     AuthorService,
+    ChapterLikesService,
+    TitleCommentLikesService,
+    PageCommentLikesService,
   ],
   exports: [
     UserService,
@@ -46,6 +52,9 @@ import { AuthorService } from './author.service';
     SeedService,
     RatingService,
     AuthorService,
+    ChapterLikesService,
+    TitleCommentLikesService,
+    PageCommentLikesService,
   ],
 })
 export class ServiceModule {}

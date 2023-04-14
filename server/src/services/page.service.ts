@@ -3,7 +3,6 @@ import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from '../errors/businessErrors/businessError';
 import {
   ChapterErrorKey,
-  GeneralErrorKey,
   PageErrorKey,
   TitleErrorKey,
 } from 'src/controllers/errorKeys';
@@ -12,7 +11,12 @@ import {
 export class PageService {
   constructor(private readonly db: DatabaseService) {}
 
-  async getList(titleId: number, c: number, page: number, perPage: number) {
+  async getList(
+    titleId: number,
+    chapterNumber: number,
+    page: number,
+    perPage: number,
+  ) {
     let skip: number;
     let take: number;
 
@@ -21,14 +25,10 @@ export class PageService {
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { number: c, titleId },
+      where: { number: chapterNumber, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
-
-    const isMatches = titleId === chapter.titleId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     if (page && perPage) {
       take = Number(perPage);
@@ -45,21 +45,17 @@ export class PageService {
     return pages;
   }
 
-  async getById(titleId: number, c: number, number: number) {
+  async getById(titleId: number, chapterNumber: number, number: number) {
     const title = await this.db.title.findUnique({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { number: c, titleId },
+      where: { number: chapterNumber, titleId },
       select: { id: true, titleId: true },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
-
-    const isMatches = title.id === chapter.titleId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     const page = await this.db.page.findFirst({
       where: { chapterId: chapter.id, number },
@@ -70,20 +66,21 @@ export class PageService {
     return page;
   }
 
-  async create(titleId: number, c: number, imgUri: string, number: number) {
+  async create(
+    titleId: number,
+    chapterNumber: number,
+    imgUri: string,
+    number: number,
+  ) {
     const title = await this.db.title.findUnique({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { number: c, titleId },
+      where: { number: chapterNumber, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
-
-    const isMatches = titleId === chapter.titleId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     const page = await this.db.page.findFirst({
       where: { number, chapterId: chapter.id },
@@ -100,32 +97,27 @@ export class PageService {
     });
   }
 
-  async updateById(titleId: number, c: number, number: number, imgUri: string) {
+  async updateById(
+    titleId: number,
+    chapterNumber: number,
+    number: number,
+    imgUri: string,
+  ) {
     const title = await this.db.title.findUnique({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { number: c, titleId },
+      where: { number: chapterNumber, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
-
-    const isMatchesTitleId = titleId === chapter.titleId;
-
-    if (!isMatchesTitleId)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Title Id');
 
     const page = await this.db.page.findFirst({
       where: { number, chapterId: chapter.id },
     });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
-
-    const isMatches = page.chapterId === chapter.id;
-
-    if (!isMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Chapter Id');
 
     const updatedPage = await this.db.page.update({
       where: { id: page.id },
@@ -137,32 +129,22 @@ export class PageService {
     return updatedPage;
   }
 
-  async delete(titleId: number, c: number, number: number) {
+  async delete(titleId: number, chapterNumber: number, number: number) {
     const title = await this.db.title.findUnique({ where: { id: titleId } });
 
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
     const chapter = await this.db.chapter.findFirst({
-      where: { number: c, titleId },
+      where: { number: chapterNumber, titleId },
     });
 
     if (!chapter) throw new BusinessError(ChapterErrorKey.CHAPTER_NOT_EXIST);
-
-    const isMatchesTitleId = titleId === chapter.titleId;
-
-    if (!isMatchesTitleId)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Title Id');
 
     const page = await this.db.page.findFirst({
       where: { number, chapterId: chapter.id },
     });
 
     if (!page) throw new BusinessError(PageErrorKey.PAGE_NOT_EXIST);
-
-    const isMatches = page.chapterId === chapter.id;
-
-    if (!isMatches)
-      throw new BusinessError(GeneralErrorKey.ID_NOT_SAME + 'Chapter Id');
 
     await this.db.page.delete({ where: { id: page.id } });
     return;

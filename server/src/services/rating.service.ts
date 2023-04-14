@@ -57,13 +57,9 @@ export class RatingService {
     const title = await this.db.title.findFirst({ where: { id: titleId } });
     if (!title) throw new BusinessError(TitleErrorKey.TITLE_NOT_FOUND);
 
-    const rate = await this.db.rating.findFirst({ where: { id } });
+    const rate = await this.db.rating.findFirst({ where: { id, userId } });
 
     if (!rate) throw new BusinessError(RatingErrorKey.RATE_NOT_EXIST);
-
-    const isMatches = userId === rate.userId;
-
-    if (!isMatches) throw new BusinessError(GeneralErrorKey.ID_NOT_SAME);
 
     await this.db.rating.delete({
       where: { id },
