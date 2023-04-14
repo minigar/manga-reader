@@ -4,10 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
-import { JwtInterceptor } from "../../interceptors/jwt.interceptor";
-import {ToastModule} from "primeng/toast";
-import {MessageService} from "primeng/api";
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -17,13 +14,7 @@ import {MessageService} from "primeng/api";
   exports: [
     LoginComponent,
   ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
-      multi: true
-    }
-  ],
+  providers: [],
   imports: [
     ToastModule,
     CommonModule,

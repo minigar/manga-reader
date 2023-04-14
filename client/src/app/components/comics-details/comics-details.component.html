@@ -1,0 +1,57 @@
+<main class="detailsBlock">
+
+    <div *ngIf="comicsDetails" class="info">
+      <div class="leftInfo">
+        <div class="headerInfo">
+          <img src="{{ comicsDetails.data.imgUrl }}" alt="image">
+        </div>
+        <main class="infoContent">
+          <div class="infoBlock">
+            <h4> Тип </h4>
+            <h4> {{ comicsDetails.data.type }} </h4>
+          </div>
+          <div class="infoBlock">
+            <h4> Рік випуску </h4>
+            <h4> {{ comicsDetails.data.yearRelease }} </h4>
+          </div>
+          <div class="infoBlock">
+            <h4> Статус тайтла </h4>
+            <h4> {{ comicsDetails.data.status }} </h4>
+          </div>
+          <div class="infoBlock">
+            <h4> Автор </h4>
+            <h4> {{ author?.data?.name }} </h4>
+          </div>
+        </main>
+      </div>
+      <div class="rightInfo">
+          <header>
+            <div> {{ comicsDetails.data.name }} </div>
+            <div> Comics rating : {{ comicsDetails.data.rating }} </div>
+          </header>
+
+        <p-tabView>
+          <p-tabPanel header="Information">
+            <p>
+              {{ comicsDetails.data.description }}
+            </p>
+          </p-tabPanel>
+          <p-tabPanel header="Chapters">
+            <p>
+              <ng-container *ngIf="!comicsDetails.data.chapters">
+                No chapters
+              </ng-container>
+            </p>
+          </p-tabPanel>
+          <p-tabPanel header="Comments">
+            <p>
+              <ng-container *ngIf="!comicsDetails.data.comments">
+                No comments
+              </ng-container>
+            </p>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+
+</main>
