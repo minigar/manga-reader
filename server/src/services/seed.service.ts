@@ -31,6 +31,12 @@ export class SeedService {
     await this.db.chapter.deleteMany();
     await this.db.rating.deleteMany();
     await this.db.author.deleteMany();
+    await this.db.bookmark.deleteMany();
+    await this.db.chapterLike.deleteMany();
+    await this.db.titleCommentDislike.deleteMany();
+    await this.db.titleCommentLike.deleteMany();
+    await this.db.pageCommentLike.deleteMany();
+    await this.db.pageCommentDislike.deleteMany();
 
     const Oda = await this.db.author.create({
       data: {
@@ -290,6 +296,15 @@ export class SeedService {
       7,
     );
     //___________________________________________________________________________________
+
+    await this.db.bookmark.create({
+      data: {
+        userId: user1.id,
+        titleId: title5.id,
+        chapterId: chapter1ForTitle5.id,
+        pageId: page1ForChaper1.id,
+      },
+    });
 
     const comment1ForPage1 = await this.pageCommentsService.create(
       title5.id,

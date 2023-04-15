@@ -17,6 +17,7 @@ import { ChapterLikesService } from './chapter-likes.service';
 import { TitleCommentLikesService } from './title-comment-likes.service';
 import { PageCommentLikesService } from './page-comment-likes.service';
 import { PageCommentsService } from './page-comments.service';
+import { BookmarkService } from './bookmark.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -37,6 +38,7 @@ import { PageCommentsService } from './page-comments.service';
     ChapterLikesService,
     TitleCommentLikesService,
     PageCommentLikesService,
+    BookmarkService,
   ],
   exports: [
     UserService,
@@ -55,6 +57,7 @@ import { PageCommentsService } from './page-comments.service';
     ChapterLikesService,
     TitleCommentLikesService,
     PageCommentLikesService,
+    BookmarkService,
   ],
 })
 export class ServiceModule {}

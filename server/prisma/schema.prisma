@@ -36,12 +36,29 @@ model User {
   TitleCommentLike    TitleCommentLike[]
   PageCommentDislike  PageCommentDislike[]
   TitleCommentDislike TitleCommentDislike[]
+  bookmarks           Bookmark[]
 
   role    Role    @default(USER)
   isAdmin Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Bookmark {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  title   Title @relation(fields: [titleId], references: [id])
+  titleId Int
+
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId Int
+
+  page   Page @relation(fields: [pageId], references: [id])
+  pageId Int
+
+  @@id(name: "id", [userId, titleId])
 }
 
 model List {
@@ -81,11 +98,12 @@ model Title {
   Author   Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId Int
 
-  list     List[]
-  genres   Genre[]
-  ratings  Rating[]
-  chapters Chapter[]
-  comments TitleComment[]
+  list      List[]
+  genres    Genre[]
+  ratings   Rating[]
+  chapters  Chapter[]
+  comments  TitleComment[]
+  bookmarks Bookmark[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -155,11 +173,11 @@ model Chapter {
   volume     Int
   likeAmount Int     @default(0)
 
-  Title   Title         @relation(fields: [titleId], references: [id], onDelete: Cascade)
-  titleId Int
-  likes   ChapterLike[]
-
-  pages Page[]
+  Title     Title         @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  titleId   Int
+  likes     ChapterLike[]
+  bookmarks Bookmark[]
+  pages     Page[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -185,7 +203,8 @@ model Page {
   Chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId Int
 
-  comments PageComment[]
+  bookmarks Bookmark[]
+  comments  PageComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
