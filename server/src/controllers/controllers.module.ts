@@ -18,6 +18,7 @@ import { AuthorController } from './author.controller';
 import { ChapterLikesController } from './chapter-likes.controller';
 import { TitleCommentLikesController } from './title-comment-likes.controller';
 import { PageCommentLikesController } from './page-comment-likes.controller';
+import { BookmarkController } from './bookmark.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -38,6 +39,7 @@ import { PageCommentLikesController } from './page-comment-likes.controller';
     ChapterLikesController,
     TitleCommentLikesController,
     PageCommentLikesController,
+    BookmarkController,
   ],
 })
 export class ControllersModule {}
