@@ -24,7 +24,7 @@ export class NotificationService {
     if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
 
     const nofitication = await this.db.titleNotification.findFirst({
-      where: { users: { some: { id: userId } } },
+      where: { users: { some: { id: userId } }, id },
     });
 
     if (!nofitication) throw new BusinessError('nofitication not found!');
