@@ -55,6 +55,20 @@ export class ChapterService {
       },
     });
 
+    const userIds = await this.db.user.findMany({ select: { id: true } });
+
+    const notification = await this.db.titleNotification.create({
+      data: {
+        chapterId: newChapter.id,
+        titleId,
+      },
+    });
+
+    await this.db.titleNotification.update({
+      where: { id: notification.id },
+      data: { users: { set: userIds.map((id) => id) } },
+    });
+
     return newChapter;
   }
 

@@ -27,22 +27,37 @@ model User {
   hashedRT String?
   imgUrl   String  @default("https://mangalib.me/uploads/users/34417/cszRhLbgYv.jpg")
 
-  lists               List[]
-  rating              Rating[]
-  pageComments        PageComment[]
-  chapterLikes        ChapterLike[]
-  titleComments       TitleComment[]
-  PageCommentLike     PageCommentLike[]
-  TitleCommentLike    TitleCommentLike[]
-  PageCommentDislike  PageCommentDislike[]
-  TitleCommentDislike TitleCommentDislike[]
-  bookmarks           Bookmark[]
+  lists                List[]
+  rating               Rating[]
+  bookmarks            Bookmark[]
+  pageComments         PageComment[]
+  chapterLikes         ChapterLike[]
+  titleComments        TitleComment[]
+  pageCommentLikes     PageCommentLike[]
+  titleCommentLikes    TitleCommentLike[]
+  notifications        TitleNotification[]
+  pageCommentDislikes  PageCommentDislike[]
+  titleCommentDislikes TitleCommentDislike[]
 
   role    Role    @default(USER)
   isAdmin Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model TitleNotification {
+  id Int @id @default(autoincrement())
+
+  users  User[]
+
+  title   Title @relation(fields: [titleId], references: [id])
+  titleId Int
+
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId Int
+
+  createdAt DateTime @default(now())
 }
 
 model Bookmark {
@@ -98,12 +113,13 @@ model Title {
   Author   Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId Int
 
-  list      List[]
-  genres    Genre[]
-  ratings   Rating[]
-  chapters  Chapter[]
-  comments  TitleComment[]
-  bookmarks Bookmark[]
+  list          List[]
+  genres        Genre[]
+  ratings       Rating[]
+  chapters      Chapter[]
+  bookmarks     Bookmark[]
+  comments      TitleComment[]
+  notifications TitleNotification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -173,11 +189,12 @@ model Chapter {
   volume     Int
   likeAmount Int     @default(0)
 
-  Title     Title         @relation(fields: [titleId], references: [id], onDelete: Cascade)
-  titleId   Int
-  likes     ChapterLike[]
-  bookmarks Bookmark[]
-  pages     Page[]
+  Title         Title               @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  titleId       Int
+  likes         ChapterLike[]
+  bookmarks     Bookmark[]
+  pages         Page[]
+  notifications TitleNotification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

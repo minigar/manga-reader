@@ -18,6 +18,7 @@ import { TitleCommentLikesService } from './title-comment-likes.service';
 import { PageCommentLikesService } from './page-comment-likes.service';
 import { PageCommentsService } from './page-comments.service';
 import { BookmarkService } from './bookmark.service';
+import { NotificationService } from './notification.service';
 
 @Module({
   imports: [ConfigModule, DatabaseModule],
@@ -39,6 +40,7 @@ import { BookmarkService } from './bookmark.service';
     TitleCommentLikesService,
     PageCommentLikesService,
     BookmarkService,
+    NotificationService,
   ],
   exports: [
     UserService,
@@ -58,6 +60,7 @@ import { BookmarkService } from './bookmark.service';
     TitleCommentLikesService,
     PageCommentLikesService,
     BookmarkService,
+    NotificationService,
   ],
 })
 export class ServiceModule {}
