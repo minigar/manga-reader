@@ -55,6 +55,25 @@ export class ChapterService {
       },
     });
 
+    const userIds = await this.db.user.findMany({
+      where: { lists: { some: { titles: { some: { id: titleId } } } } }, //search users that have chapter.title in user's list
+      select: { id: true },
+    });
+
+    if (!userIds) return newChapter;
+
+    const notification = await this.db.titleNotification.create({
+      data: {
+        chapterId: newChapter.id,
+        titleId,
+      },
+    });
+
+    await this.db.titleNotification.update({
+      where: { id: notification.id },
+      data: { users: { set: userIds.map((id) => id) } },
+    });
+
     return newChapter;
   }
 

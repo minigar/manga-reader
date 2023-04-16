@@ -19,6 +19,7 @@ import { ChapterLikesController } from './chapter-likes.controller';
 import { TitleCommentLikesController } from './title-comment-likes.controller';
 import { PageCommentLikesController } from './page-comment-likes.controller';
 import { BookmarkController } from './bookmark.controller';
+import { NotificationController } from './notification.controller';
 
 @Module({
   imports: [ConfigModule, DatabaseModule, ServiceModule],
@@ -40,6 +41,7 @@ import { BookmarkController } from './bookmark.controller';
     TitleCommentLikesController,
     PageCommentLikesController,
     BookmarkController,
+    NotificationController,
   ],
 })
 export class ControllersModule {}
