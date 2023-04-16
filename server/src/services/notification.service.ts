@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/data/database.service';
 import { BusinessError } from 'src/errors/businessErrors/businessError';
 import { UserErrorKey } from '../controllers/errorKeys/UserErrorKey';
-import { ListErrorKey } from '../controllers/errorKeys/ListErrorKey';
 
 @Injectable()
 export class NotificationService {
@@ -24,11 +23,16 @@ export class NotificationService {
 
     if (!user) throw new BusinessError(UserErrorKey.USER_NOT_FOUND);
 
-    const list = await this.db.list.delete({ where: { id } });
+    const nofitication = await this.db.titleNotification.findFirst({
+      where: { users: { some: { id: userId } } },
+    });
 
-    if (!list) throw new BusinessError(ListErrorKey.LIST_NOT_FOUND);
+    if (!nofitication) throw new BusinessError('nofitication not found!');
 
-    await this.db.list.delete({ where: { id } });
+    await this.db.titleNotification.update({
+      where: { id },
+      data: { users: { disconnect: { id: userId } } },
+    });
 
     return;
   }

@@ -37,6 +37,7 @@ export class SeedService {
     await this.db.titleCommentLike.deleteMany();
     await this.db.pageCommentLike.deleteMany();
     await this.db.pageCommentDislike.deleteMany();
+    await this.db.titleNotification.deleteMany();
 
     const Oda = await this.db.author.create({
       data: {
@@ -54,6 +55,10 @@ export class SeedService {
     });
 
     await this.createRequiredUserLists(user1.id);
+
+    const listDone = await this.db.list.findUnique({
+      where: { userId_name: { userId: user1.id, name: 'Done' } },
+    });
 
     const user2 = await this.db.user.create({
       data: {
@@ -167,6 +172,9 @@ export class SeedService {
         yearRelease: 2020,
       },
     });
+
+    await this.listService.addToList(user1.id, listDone.id, title5.id);
+
     // _______________________
 
     await this.genreService.addTitleTo(genre1.id, title1.id);

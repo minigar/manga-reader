@@ -49,28 +49,28 @@ model User {
 model TitleNotification {
   id Int @id @default(autoincrement())
 
-  users  User[]
+  users User[]
 
-  title   Title @relation(fields: [titleId], references: [id])
+  title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
   titleId Int
 
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId Int
 
   createdAt DateTime @default(now())
 }
 
 model Bookmark {
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
-  title   Title @relation(fields: [titleId], references: [id])
+  title   Title @relation(fields: [titleId], references: [id], onDelete: Cascade)
   titleId Int
 
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId Int
 
-  page   Page @relation(fields: [pageId], references: [id])
+  page   Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId Int
 
   @@id(name: "id", [userId, titleId])
@@ -87,6 +87,8 @@ model List {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique(name: "userId_name", [userId, name])
 }
 
 model Genre {

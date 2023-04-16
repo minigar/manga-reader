@@ -105,12 +105,19 @@ export class ListService {
       },
       data: {
         titles: {
-          connect: {
-            id: titleId,
-          },
+          connect: { id: titleId },
         },
       },
       include: ListIncludes,
+    });
+
+    await this.db.list.update({
+      where: { userId_name: { userId, name: 'All' } },
+      data: {
+        titles: {
+          connect: { id: titleId },
+        },
+      },
     });
 
     return updatedList;
