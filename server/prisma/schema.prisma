@@ -10,6 +10,8 @@ datasource db {
 model Author {
   id Int @id @default(autoincrement())
 
+  imgUrl   String  @default("https://mangalib.me/uploads/users/placeholder.png")
+
   name String @unique
 
   titles Title[]
@@ -25,7 +27,7 @@ model User {
   email    String  @unique
   password String
   hashedRT String?
-  imgUrl   String  @default("https://mangalib.me/uploads/users/34417/cszRhLbgYv.jpg")
+  imgUrl   String  @default("https://mangalib.me/uploads/users/placeholder.png")
 
   lists                List[]
   rating               Rating[]
